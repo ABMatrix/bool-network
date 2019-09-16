@@ -1368,6 +1368,7 @@ dependencies = [
  "srml-consensus 2.0.0 (git+https://github.com/laddernetwork/substrate?branch=ladder)",
  "srml-executive 2.0.0 (git+https://github.com/laddernetwork/substrate?branch=ladder)",
  "srml-indices 2.0.0 (git+https://github.com/laddernetwork/substrate?branch=ladder)",
+ "srml-move 0.1.0",
  "srml-sudo 2.0.0 (git+https://github.com/laddernetwork/substrate?branch=ladder)",
  "srml-support 2.0.0 (git+https://github.com/laddernetwork/substrate?branch=ladder)",
  "srml-system 2.0.0 (git+https://github.com/laddernetwork/substrate?branch=ladder)",
@@ -2313,6 +2314,16 @@ dependencies = [
  "serde 1.0.89 (registry+https://github.com/rust-lang/crates.io-index)",
  "sr-std 2.0.0 (git+https://github.com/laddernetwork/substrate?branch=ladder)",
  "substrate-primitives 2.0.0 (git+https://github.com/laddernetwork/substrate?branch=ladder)",
+]
+
+[[package]]
+name = "srml-move"
+version = "0.1.0"
+dependencies = [
+ "parity-codec 3.5.1 (registry+https://github.com/rust-lang/crates.io-index)",
+ "serde 1.0.89 (registry+https://github.com/rust-lang/crates.io-index)",
+ "srml-support 2.0.0 (git+https://github.com/laddernetwork/substrate?branch=ladder)",
+ "srml-system 2.0.0 (git+https://github.com/laddernetwork/substrate?branch=ladder)",
 ]
 
 [[package]]

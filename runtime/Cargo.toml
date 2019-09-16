@@ -26,6 +26,7 @@ client = { package = "substrate-client", git = "https://github.com/laddernetwork
 consensus-aura = { package = "substrate-consensus-aura-primitives", git = "https://github.com/laddernetwork/substrate", branch = "ladder", default_features = false }
 offchain-primitives = { package = "substrate-offchain-primitives", git = "https://github.com/laddernetwork/substrate", branch = "ladder", default-features = false }
 consensus_authorities = { package = "substrate-consensus-authorities", git = "https://github.com/laddernetwork/substrate", branch = "ladder", default-features = false }
+vm = { package = "srml-move", path = "../vm", default-features = false}
 
 [features]
 default = ["std"]
@@ -50,4 +51,5 @@ std = [
 	"consensus-aura/std",
 	"offchain-primitives/std",
 	"consensus_authorities/std",
+	"vm/std",
 ]
