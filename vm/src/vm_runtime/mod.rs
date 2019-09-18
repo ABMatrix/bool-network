@@ -17,6 +17,10 @@ pub mod block_processor;	//--
 pub mod runtime;			//---
 pub mod move_vm;
 
+pub use move_vm::MoveVM;
+pub use process_txn::verify::static_verify_program;
+pub use txn_executor::execute_function;
+
 use crate::vm_runtime::config::VMConfig;
 use crate::def::{errors::VMInvariantViolation, IndexKind};
 use crate::state_view::StateView;

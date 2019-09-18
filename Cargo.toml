@@ -37,9 +37,12 @@ vergen = "3"
 
 [workspace]
 members = [
+    "rml-move",
 	"vm",
 	"mock",
 	"vm/crypto",
 	"vm/nextgen_crypto",
-	# "vm/bytecode_verifier"
+	"compiler",
+	"compiler/ir_to_bytecode",
+	"compiler/stdlib",
 ]

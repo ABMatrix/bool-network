@@ -115,6 +115,7 @@ impl<'txn> TransactionDataCache<'txn> {
                     self.data_map.insert(ap.clone(), new_root);
                 }
                 None => {
+                    println!("@@@ miss data. ap {}", ap);
                     return Ok(Err(VMRuntimeError {
                         loc: Location::new(),
                         err: VMErrorKind::MissingData,

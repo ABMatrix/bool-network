@@ -1,0 +1,12 @@
+[package]
+name = "stdlib"
+version = "0.1.0"
+edition = "2018"
+authors = ["Libra Association <opensource@libra.org>"]
+license = "Apache-2.0"
+publish = false
+
+[dependencies]
+vm = { path = "../../vm" }
+ir_to_bytecode = { path = "../ir_to_bytecode" }
+lazy_static = "1.3.0"

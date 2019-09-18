@@ -312,6 +312,16 @@ impl PartialEq<Signature> for Signature {
 
 impl Eq for Signature {}
 
+impl PrivateKey {
+    /// Obtain a private key from a slice.
+    pub fn from_slice(data: &[u8]) -> Result<Self> {
+        match ed25519_dalek::SecretKey::from_bytes(data) {
+            Ok(key) => Ok(PrivateKey { value: key }),
+            Err(err) => bail!("Private key decode error: {}", err),
+        }
+    }
+}
+
 impl PublicKey {
     /// The length of the public key in bytes.
     pub const LENGTH: usize = ed25519_dalek::PUBLIC_KEY_LENGTH;

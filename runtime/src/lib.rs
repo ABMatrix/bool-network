@@ -191,7 +191,7 @@ impl template::Trait for Runtime {
 	type Event = Event;
 }
 
-impl vm::Trait for Runtime {
+impl vmove::Trait for Runtime {
 	type Event = Event;
 }
 
@@ -210,7 +210,7 @@ construct_runtime!(
 		Sudo: sudo,
 		// Used for the module template in `./template.rs`
 		TemplateModule: template::{Module, Call, Storage, Event<T>},
-		Vm: vm::{Module, Call, Storage, Event<T>},
+		Vmove: vmove::{Module, Call, Storage, Event<T>},
 	}
 );
 

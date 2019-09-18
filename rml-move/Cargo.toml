@@ -1,0 +1,29 @@
+[package]
+name = "rml-move"
+version = "0.1.0"
+authors = ["Anonymous"]
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+bincode = "1.1.4"
+mock = { path = "../mock" }
+failure = { package = "failure_ext", path = "../vm/failure_ext" }
+canonical_serialization = { path = "../vm/canonical_serialization" }
+vm = { path = "../vm" }
+proptest = { version = "0.9" , optional = true }
+proptest-derive = { version = "0.1.1", optional = true}
+serde = { version = "1.0", optional = true }
+parity-codec = { version = "3.3", default-features = false }
+support = { package = "srml-support", git = "https://github.com/laddernetwork/substrate", branch = "ladder", default_features = false }
+system = { package = "srml-system", git = "https://github.com/laddernetwork/substrate", branch = "ladder", default_features = false }
+
+[features]
+default = ["std"]
+std = [
+	"serde",
+	"parity-codec/std",
+	"support/std",
+	"system/std",
+]

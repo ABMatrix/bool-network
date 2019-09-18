@@ -1,0 +1,7 @@
+import 0x0.LibraAccount;
+main (fresh_address: address, initial_amount: u64) {
+  // let to_amount: u64;
+  to_amount = move(initial_amount) + 1000;
+  LibraAccount.create_new_account(move(fresh_address), move(to_amount));
+  return;
+}

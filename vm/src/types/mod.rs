@@ -9,7 +9,10 @@ use std::{
 };
 use rand::{rngs::OsRng, Rng};
 use serde::{Deserialize, Serialize};
-use crypto::hash::{AccessPathHasher, AccountAddressHasher,  CryptoHash, CryptoHasher, HashValue};
+use crypto::{
+	hash::{AccessPathHasher, AccountAddressHasher,  CryptoHash, CryptoHasher, HashValue},
+	PublicKey as LegacyPublicKey,
+};
 use canonical_serialization::{
     CanonicalDeserialize, CanonicalDeserializer, CanonicalSerialize, CanonicalSerializer,
     SimpleSerializer,
@@ -99,6 +102,16 @@ impl AsRef<[u8]> for AccountAddress {
     }
 }
 
+impl TryFrom<String> for AccountAddress {
+    type Error = failure::Error;
+
+    fn try_from(s: String) -> Result<AccountAddress> {
+        assert!(!s.is_empty());
+        let bytes_out = ::hex::decode(s)?;
+        AccountAddress::try_from(bytes_out.as_slice())
+    }
+}
+
 impl TryFrom<&[u8]> for AccountAddress {
 	type Error = failure::Error;
 	/// Tries to convert the provided byte array into Address.
@@ -123,6 +136,24 @@ impl TryFrom<Vec<u8>> for AccountAddress {
     }
 }
 
+impl From<AccountAddress> for Vec<u8> {
+    fn from(addr: AccountAddress) -> Vec<u8> {
+        addr.0.to_vec()
+    }
+}
+
+impl From<&AccountAddress> for Vec<u8> {
+    fn from(addr: &AccountAddress) -> Vec<u8> {
+        addr.0.to_vec()
+    }
+}
+
+impl From<LegacyPublicKey> for AccountAddress {
+    fn from(public_key: LegacyPublicKey) -> AccountAddress {
+        let ed25519_public_key: Ed25519PublicKey = public_key.into();
+        AccountAddress::from_public_key(&ed25519_public_key)
+    }
+}
 
 impl CryptoHash for AccountAddress {
     type Hasher = AccountAddressHasher;
