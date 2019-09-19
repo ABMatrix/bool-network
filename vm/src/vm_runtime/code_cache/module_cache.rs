@@ -27,9 +27,9 @@ use crate::def::{
 };
 use vm_cache_map::{Arena, CacheRefMap};
 
-#[cfg(test)]
-#[path = "../unit_tests/module_cache_tests.rs"]
-mod module_cache_tests;
+// #[cfg(test)]
+// #[path = "../unit_tests/module_cache_tests.rs"]
+// mod module_cache_tests;
 
 /// Trait that describe a cache for modules. The idea is that this trait will in charge of
 /// loading resolving all dependencies of needed module from the storage.

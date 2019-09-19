@@ -6,8 +6,8 @@
 
 mod value_serializer;
 
-#[cfg(any(test, feature = "testing"))]
-mod proptest_types;
+// #[cfg(any(test, feature = "testing"))]
+// mod proptest_types;
 
 pub mod native_functions;
 pub mod value;

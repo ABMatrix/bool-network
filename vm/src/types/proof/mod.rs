@@ -3,15 +3,15 @@
 
 pub mod definition;
 pub mod position;
-#[cfg(any(test, feature = "testing"))]
-pub mod proptest_proof;
+// #[cfg(any(test, feature = "testing"))]
+// pub mod proptest_proof;
 pub mod treebits;
 
-#[cfg(test)]
-#[path = "unit_tests/proof_test.rs"]
-mod proof_test;
-#[cfg(test)]
-mod unit_tests;
+// #[cfg(test)]
+// #[path = "unit_tests/proof_test.rs"]
+// mod proof_test;
+// #[cfg(test)]
+// mod unit_tests;
 
 use crate::types::{
     account_state_blob::AccountStateBlob,

@@ -6,10 +6,6 @@ use super::struct_def::StructDef;
 use canonical_serialization::*;
 use failure::prelude::*;
 
-#[cfg(test)]
-#[path = "../unit_tests/type_prop_tests.rs"]
-mod type_prop_tests;
-
 /// Resolved form of runtime types.
 #[derive(Debug, Eq, PartialEq, Clone)]
 pub enum Type {

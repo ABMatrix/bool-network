@@ -82,10 +82,6 @@ use tiny_keccak::Keccak;
 
 const LIBRA_HASH_SUFFIX: &[u8] = b"@@$$LIBRA$$@@";
 
-#[cfg(test)]
-#[path = "unit_tests/hash_test.rs"]
-mod hash_test;
-
 /// Output value of our hash function. Intentionally opaque for safety and modularity.
 #[derive(Clone, Copy, Eq, Hash, PartialEq, Serialize, Deserialize, PartialOrd, Ord, Arbitrary)]
 pub struct HashValue {

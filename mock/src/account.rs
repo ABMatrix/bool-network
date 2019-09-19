@@ -80,6 +80,17 @@ impl Account {
         }
     }
 
+    pub fn mock(data: &[u8]) -> Self {
+        let pubkey: PublicKey = PublicKey::from_slice(data).unwrap();
+        let addr = pubkey.into();
+        let privkey = PrivateKey::from_slice(data).unwrap();
+        Account {
+            addr,
+            privkey,
+            pubkey,
+        }
+    }
+
     /// Creates a new account representing the association in memory.
     ///
     /// The address will be [`association_address`][account_config::association_address], and
@@ -357,6 +368,20 @@ impl AccountData {
     /// Returns the initial received events count.
     pub fn received_events_count(&self) -> u64 {
         self.received_events_count
+    }
+
+    pub fn make_resource_with_public_key(pubkey: PublicKey, balance: u64, sequence: u64) -> Value {
+        let coin = Value::Struct(vec![MutVal::new(Value::U64(balance))]);
+        Value::Struct(vec![
+            MutVal::new(Value::ByteArray(ByteArray::new(
+                AccountAddress::from(pubkey).to_vec(),
+            ))),
+            MutVal::new(coin),
+            MutVal::new(Value::Bool(true)),
+            MutVal::new(Value::U64(0)),
+            MutVal::new(Value::U64(0)),
+            MutVal::new(Value::U64(sequence)),
+        ])
     }
 }
 

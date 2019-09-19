@@ -3,9 +3,9 @@
 
 //! This module has definition of various proofs.
 
-#[cfg(test)]
-#[path = "unit_tests/proof_proto_conversion_test.rs"]
-mod proof_proto_conversion_test;
+// #[cfg(test)]
+// #[path = "unit_tests/proof_proto_conversion_test.rs"]
+// mod proof_proto_conversion_test;
 
 use self::bitmap::{AccumulatorBitmap, SparseMerkleBitmap};
 use crate::types::transaction::TransactionInfo;

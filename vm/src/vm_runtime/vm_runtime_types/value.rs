@@ -23,15 +23,15 @@ use crate::def::{
     },
 };
 
-#[cfg(test)]
-#[path = "unit_tests/value_prop_tests.rs"]
-mod value_prop_tests;
-#[cfg(test)]
-#[path = "unit_tests/value_tests.rs"]
-mod value_tests;
-#[cfg(test)]
-#[path = "unit_tests/vm_types.rs"]
-mod vm_types;
+// #[cfg(test)]
+// #[path = "unit_tests/value_prop_tests.rs"]
+// mod value_prop_tests;
+// #[cfg(test)]
+// #[path = "unit_tests/value_tests.rs"]
+// mod value_tests;
+// #[cfg(test)]
+// #[path = "unit_tests/vm_types.rs"]
+// mod vm_types;
 
 #[derive(Debug, Clone)]
 pub enum Value {

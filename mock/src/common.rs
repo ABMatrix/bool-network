@@ -63,7 +63,7 @@ pub fn peer_to_peer_txn(
         args,
         seq_num,
         gas_costs::TXN_RESERVED, // this is a default for gas
-        1,                       // this is a default for gas
+        0,                       // this is a default for gas
     )
 }
 

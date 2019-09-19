@@ -1,19 +1,21 @@
 use support::{decl_module, decl_storage, decl_event, StorageValue, dispatch::Result};
-use support::{StorageMap};
-use system::ensure_signed;
+use support::{StorageMap, ensure};
+use system::{ensure_signed};
+use primitives::traits::As;
 
 mod exec;
 mod store;
+mod tests;
 
 use vm::types::transaction::SignedTransaction;
 use canonical_serialization::{
     CanonicalSerialize, CanonicalSerializer, SimpleDeserializer, SimpleSerializer,
 };
 use exec::Executor;
+use mock::account::{Account, AccountData};
 
 type Balance = Vec<u8>;
 type Gas = u64;
-type Hash = Vec<u8>;
 type MoveModule = Vec<u8>;
 
 /// The module's configuration trait.
@@ -24,21 +26,21 @@ pub trait Trait: system::Trait {
 	type Event: From<Event<Self>> + Into<<Self as system::Trait>::Event>;
 }
 
+
 /// This module's storage items.
 decl_storage! {
-	trait Store for Module<T: Trait> as Vm {
-		pub Something get(something) : Vec<u8>;
+	trait Store for Module<T: Trait> as Vmove {
 		/// code storage
-		pub HasGenesis get(has_genesis): bool;
-		pub CodeStorage: map Vec<u8> => MoveModule;
-		AccessStorage: map Vec<u8> => Option<Vec<u8>>;
+		HasGenesis get(has_genesis): bool;
+		CodeStorage: map Vec<u8> => MoveModule;
+		pub AccessStorage get(access_storage): map Vec<u8> => Option<Vec<u8>>;
 	}
 }
 
 decl_event!(
 	pub enum Event<T> where AccountId = <T as system::Trait>::AccountId {
 		/// code with storage hash
-		CodeStored(Hash),
+		CodeStored(Vec<u8>),
 
 		/// An event from contract of account.
 		Contract(AccountId, Vec<u8>),
@@ -68,36 +70,35 @@ decl_module! {
 //			Ok(())
 //		}
 
+
 		pub fn execute(origin, transaction: Vec<u8>) -> Result {
-			let transactor = ensure_signed(origin)?;
-			let mut executor = Self::get_executor();
-			let txn: SignedTransaction = SimpleDeserializer::deserialize(&transaction).unwrap();
-			let output = executor.execute_block(vec![txn]);
-			let txn_output = output.get(0).expect("must have a transaction output");
-			println!("output {:?}", txn_output);
-
-			executor.apply_write_set(txn_output.write_set());
-			Ok(())
-		}
-
-		pub fn test(origin, key: Vec<u8>, value: Vec<u8>) -> Result {
 			let _sender = ensure_signed(origin)?;
-			<CodeStorage<T>>::insert(key, value);
+			let mut executor = Self::get_executor();
+			let txn = SimpleDeserializer::deserialize(&transaction);
+			ensure!(txn.is_ok(), "unknown transaction");
+			let output = executor.execute_transaction(txn.expect("unknown transaction"));
+			println!("output {:?}", output);
+
+			executor.apply_write_set(output.write_set());
 			Ok(())
 		}
 
-		pub fn do_something(origin, something: Vec<u8>) -> Result {
-			let who = ensure_signed(origin)?;
+		pub fn create_account(origin, pubkey: Vec<u8>, value: u64) -> Result {
+			let sender = ensure_signed(origin)?;
+			let mut executor = Self::get_executor();
 
-			<Something<T>>::put(something);
-			println!("one");
+			// TODO: check pubkey and sender.
+			let expected_index = <system::Module<T>>::account_nonce(sender);
+//			let account = AccountData::new_with_account(Account::mock(&pubkey), value, As::<u64>::as_(expected_index));
+			let account = AccountData::new_with_account(Account::mock(&pubkey), value, 0);
+			executor.add_account_data(&account);
 			Ok(())
 		}
 	}
 }
 
 impl<T: Trait> Module<T> {
-	fn get_executor() -> Executor<T> {
+	pub fn get_executor() -> Executor<T> {
 		let executor;
 		if !<HasGenesis<T>>::get() {
 			executor = Executor::from_genesis_file();
@@ -107,4 +108,5 @@ impl<T: Trait> Module<T> {
 		}
 		executor
 	}
+
 }

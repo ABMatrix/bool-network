@@ -1201,72 +1201,72 @@ pub struct CompiledScript(CompiledScriptMut);
 /// A mutable version of `CompiledScript`. Converting to a `CompiledScript` requires this to pass
 /// the bounds checker.
 #[derive(Clone, Default, Eq, PartialEq, Debug)]
-#[cfg_attr(any(test, feature = "testing"), derive(Arbitrary))]
-#[cfg_attr(any(test, feature = "testing"), proptest(params = "usize"))]
+// #[cfg_attr(any(test, feature = "testing"), derive(Arbitrary))]
+// #[cfg_attr(any(test, feature = "testing"), proptest(params = "usize"))]
 pub struct CompiledScriptMut {
     /// Handles to all modules referenced.
-    #[cfg_attr(
-        any(test, feature = "testing"),
-        proptest(strategy = "vec(any::<ModuleHandle>(), 0..=params)")
-    )]
+    // #[cfg_attr(
+    //     any(test, feature = "testing"),
+    //     proptest(strategy = "vec(any::<ModuleHandle>(), 0..=params)")
+    // )]
     pub module_handles: Vec<ModuleHandle>,
     /// Handles to external/imported types.
-    #[cfg_attr(
-        any(test, feature = "testing"),
-        proptest(strategy = "vec(any::<StructHandle>(), 0..=params)")
-    )]
+    // #[cfg_attr(
+    //     any(test, feature = "testing"),
+    //     proptest(strategy = "vec(any::<StructHandle>(), 0..=params)")
+    // )]
     pub struct_handles: Vec<StructHandle>,
     /// Handles to external/imported functions.
-    #[cfg_attr(
-        any(test, feature = "testing"),
-        proptest(strategy = "vec(any::<FunctionHandle>(), 0..=params)")
-    )]
+    // #[cfg_attr(
+    //     any(test, feature = "testing"),
+    //     proptest(strategy = "vec(any::<FunctionHandle>(), 0..=params)")
+    // )]
     pub function_handles: Vec<FunctionHandle>,
 
     /// Type pool. All external types referenced by the transaction.
-    #[cfg_attr(
-        any(test, feature = "testing"),
-        proptest(strategy = "vec(any::<TypeSignature>(), 0..=params)")
-    )]
+    // #[cfg_attr(
+    //     any(test, feature = "testing"),
+    //     proptest(strategy = "vec(any::<TypeSignature>(), 0..=params)")
+    // )]
     pub type_signatures: TypeSignaturePool,
     /// Function signature pool. The signatures of the function referenced by the transaction.
-    #[cfg_attr(
-        any(test, feature = "testing"),
-        proptest(strategy = "vec(any_with::<FunctionSignature>(params), 0..=params)")
-    )]
+    // #[cfg_attr(
+    //     any(test, feature = "testing"),
+    //     proptest(strategy = "vec(any_with::<FunctionSignature>(params), 0..=params)")
+    // )]
     pub function_signatures: FunctionSignaturePool,
     /// Locals signature pool. The signature of the locals in `main`.
-    #[cfg_attr(
-        any(test, feature = "testing"),
-        proptest(strategy = "vec(any_with::<LocalsSignature>(params), 0..=params)")
-    )]
+    // #[cfg_attr(
+    //     any(test, feature = "testing"),
+    //     proptest(strategy = "vec(any_with::<LocalsSignature>(params), 0..=params)")
+    // )]
     pub locals_signatures: LocalsSignaturePool,
 
     /// String pool. All literals and identifiers used in this transaction.
-    #[cfg_attr(
-        any(test, feature = "testing"),
-        proptest(strategy = "vec(\".*\", 0..=params)")
-    )]
+    // #[cfg_attr(
+    //     any(test, feature = "testing"),
+    //     proptest(strategy = "vec(\".*\", 0..=params)")
+    // )]
     pub string_pool: StringPool,
     /// ByteArray pool. The byte array literals used in the transaction.
-    #[cfg_attr(
-        any(test, feature = "testing"),
-        proptest(strategy = "vec(any::<ByteArray>(), 0..=params)")
-    )]
+    // #[cfg_attr(
+    //     any(test, feature = "testing"),
+    //     proptest(strategy = "vec(any::<ByteArray>(), 0..=params)")
+    // )]
     pub byte_array_pool: ByteArrayPool,
     /// Address pool. The address literals used in the module. Those include literals for
     /// code references (`ModuleHandle`).
-    #[cfg_attr(
-        any(test, feature = "testing"),
-        proptest(strategy = "vec(any::<AccountAddress>(), 0..=params)")
-    )]
+    // #[cfg_attr(
+    //     any(test, feature = "testing"),
+    //     proptest(strategy = "vec(any::<AccountAddress>(), 0..=params)")
+    // )]
     pub address_pool: AddressPool,
 
     /// The main (script) to execute.
-    #[cfg_attr(
-        any(test, feature = "testing"),
-        proptest(strategy = "any_with::<FunctionDefinition>(params)")
-    )]
+    // #[cfg_attr(
+    //     any(test, feature = "testing"),
+    //     proptest(strategy = "any_with::<FunctionDefinition>(params)")
+    // )]
     pub main: FunctionDefinition,
 }
 
@@ -1371,63 +1371,63 @@ pub struct CompiledModuleMut {
     pub function_defs: Vec<FunctionDefinition>,
 }
 
-// Need a custom implementation of Arbitrary because as of proptest-derive 0.1.1, the derivation
-// doesn't work for structs with more than 10 fields.
-#[cfg(any(test, feature = "testing"))]
-impl Arbitrary for CompiledModuleMut {
-    type Strategy = BoxedStrategy<Self>;
-    /// The size of the compiled module.
-    type Parameters = usize;
+// // Need a custom implementation of Arbitrary because as of proptest-derive 0.1.1, the derivation
+// // doesn't work for structs with more than 10 fields.
+// #[cfg(any(test, feature = "testing"))]
+// impl Arbitrary for CompiledModuleMut {
+//     type Strategy = BoxedStrategy<Self>;
+//     /// The size of the compiled module.
+//     type Parameters = usize;
 
-    fn arbitrary_with(size: Self::Parameters) -> Self::Strategy {
-        (
-            (
-                vec(any::<ModuleHandle>(), 0..=size),
-                vec(any::<StructHandle>(), 0..=size),
-                vec(any::<FunctionHandle>(), 0..=size),
-            ),
-            (
-                vec(any::<TypeSignature>(), 0..=size),
-                vec(any_with::<FunctionSignature>(size), 0..=size),
-                vec(any_with::<LocalsSignature>(size), 0..=size),
-            ),
-            (
-                vec(any::<String>(), 0..=size),
-                vec(any::<ByteArray>(), 0..=size),
-                vec(any::<AccountAddress>(), 0..=size),
-            ),
-            (
-                vec(any::<StructDefinition>(), 0..=size),
-                vec(any::<FieldDefinition>(), 0..=size),
-                vec(any_with::<FunctionDefinition>(size), 0..=size),
-            ),
-        )
-            .prop_map(
-                |(
-                    (module_handles, struct_handles, function_handles),
-                    (type_signatures, function_signatures, locals_signatures),
-                    (string_pool, byte_array_pool, address_pool),
-                    (struct_defs, field_defs, function_defs),
-                )| {
-                    CompiledModuleMut {
-                        module_handles,
-                        struct_handles,
-                        function_handles,
-                        type_signatures,
-                        function_signatures,
-                        locals_signatures,
-                        string_pool,
-                        byte_array_pool,
-                        address_pool,
-                        struct_defs,
-                        field_defs,
-                        function_defs,
-                    }
-                },
-            )
-            .boxed()
-    }
-}
+//     fn arbitrary_with(size: Self::Parameters) -> Self::Strategy {
+//         (
+//             (
+//                 vec(any::<ModuleHandle>(), 0..=size),
+//                 vec(any::<StructHandle>(), 0..=size),
+//                 vec(any::<FunctionHandle>(), 0..=size),
+//             ),
+//             (
+//                 vec(any::<TypeSignature>(), 0..=size),
+//                 vec(any_with::<FunctionSignature>(size), 0..=size),
+//                 vec(any_with::<LocalsSignature>(size), 0..=size),
+//             ),
+//             (
+//                 vec(any::<String>(), 0..=size),
+//                 vec(any::<ByteArray>(), 0..=size),
+//                 vec(any::<AccountAddress>(), 0..=size),
+//             ),
+//             (
+//                 vec(any::<StructDefinition>(), 0..=size),
+//                 vec(any::<FieldDefinition>(), 0..=size),
+//                 vec(any_with::<FunctionDefinition>(size), 0..=size),
+//             ),
+//         )
+//             .prop_map(
+//                 |(
+//                     (module_handles, struct_handles, function_handles),
+//                     (type_signatures, function_signatures, locals_signatures),
+//                     (string_pool, byte_array_pool, address_pool),
+//                     (struct_defs, field_defs, function_defs),
+//                 )| {
+//                     CompiledModuleMut {
+//                         module_handles,
+//                         struct_handles,
+//                         function_handles,
+//                         type_signatures,
+//                         function_signatures,
+//                         locals_signatures,
+//                         string_pool,
+//                         byte_array_pool,
+//                         address_pool,
+//                         struct_defs,
+//                         field_defs,
+//                         function_defs,
+//                     }
+//                 },
+//             )
+//             .boxed()
+//     }
+// }
 
 impl CompiledModuleMut {
     /// Returns the count of a specific `IndexKind`

@@ -100,7 +100,7 @@ impl CryptoHash for ContractEvent {
 }
 
 #[derive(Clone, Debug, Eq, PartialEq)]
-#[cfg_attr(any(test, feature = "testing"), derive(Arbitrary))]
+// #[cfg_attr(any(test, feature = "testing"), derive(Arbitrary))]
 pub struct EventWithProof {
     pub transaction_version: u64, // Should be `Version`, but FromProto derive won't work that way.
     pub event_index: u64,

@@ -863,7 +863,7 @@ pub fn parse_as_transaction_argument(s: &str) -> Result<TransactionArgument> {
 
 #[cfg(test)]
 mod test_transaction_argument {
-    use crate::transaction::transaction_argument::*;
+    use super::*;
 
     #[test]
     fn parse_u64() {

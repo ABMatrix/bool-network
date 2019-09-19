@@ -11,8 +11,8 @@ pub mod signing;
 pub mod utils;
 pub mod x25519;
 
-#[cfg(test)]
-mod unit_tests;
+// #[cfg(test)]
+// mod unit_tests;
 
 pub use crate::{
     hash::HashValue,

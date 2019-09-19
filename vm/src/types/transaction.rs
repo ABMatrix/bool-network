@@ -411,7 +411,6 @@ impl CryptoHash for SignedTransaction {
 }
 
 #[derive(Clone, Debug, Eq, PartialEq)]
-#[cfg_attr(any(test, feature = "testing"), derive(Arbitrary))]
 pub struct SignedTransactionWithProof {
     pub version: Version,
     pub signed_transaction: SignedTransaction,
@@ -589,7 +588,7 @@ impl TransactionOutput {
 /// `TransactionInfo` is the object we store in the transaction accumulator. It consists of the
 /// transaction as well as the execution result of this transaction.
 #[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
-#[cfg_attr(any(test, feature = "testing"), derive(Arbitrary))]
+// #[cfg_attr(any(test, feature = "testing"), derive(Arbitrary))]
 pub struct TransactionInfo {
     /// The hash of this transaction.
     signed_transaction_hash: HashValue,

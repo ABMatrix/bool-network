@@ -159,4 +159,8 @@ impl<T: Trait> Executor<T> {
 			int_type.clone(),
 		])
 	}
+
+	pub fn struct_def(&self) -> StructDef {
+		Self::get_account_struct_def()
+	}
 }

@@ -94,30 +94,30 @@ impl CryptoHash for AccountStateBlob {
     }
 }
 
-#[cfg(any(test, feature = "testing"))]
-prop_compose! {
-    pub fn account_state_blob_strategy()(account_resource in any::<AccountResource>()) -> AccountStateBlob {
-        let mut account_state: BTreeMap<Vec<u8>, Vec<u8>> = BTreeMap::new();
-        account_state.insert(
-            account_resource_path(),
-            SimpleSerializer::<Vec<u8>>::serialize(&account_resource).unwrap(),
-        );
-        AccountStateBlob::try_from(&account_state).unwrap()
-    }
-}
+// #[cfg(any(test, feature = "testing"))]
+// prop_compose! {
+//     pub fn account_state_blob_strategy()(account_resource in any::<AccountResource>()) -> AccountStateBlob {
+//         let mut account_state: BTreeMap<Vec<u8>, Vec<u8>> = BTreeMap::new();
+//         account_state.insert(
+//             account_resource_path(),
+//             SimpleSerializer::<Vec<u8>>::serialize(&account_resource).unwrap(),
+//         );
+//         AccountStateBlob::try_from(&account_state).unwrap()
+//     }
+// }
 
-#[cfg(any(test, feature = "testing"))]
-impl Arbitrary for AccountStateBlob {
-    type Parameters = ();
-    type Strategy = BoxedStrategy<Self>;
+// #[cfg(any(test, feature = "testing"))]
+// impl Arbitrary for AccountStateBlob {
+//     type Parameters = ();
+//     type Strategy = BoxedStrategy<Self>;
 
-    fn arbitrary_with(_args: Self::Parameters) -> Self::Strategy {
-        account_state_blob_strategy().boxed()
-    }
-}
+//     fn arbitrary_with(_args: Self::Parameters) -> Self::Strategy {
+//         account_state_blob_strategy().boxed()
+//     }
+// }
 
 #[derive(Clone, Debug, Eq, PartialEq)]
-#[cfg_attr(any(test, feature = "testing"), derive(Arbitrary))]
+// #[cfg_attr(any(test, feature = "testing"), derive(Arbitrary))]
 pub struct AccountStateWithProof {
     /// The transaction version at which this account state is seen.
     pub version: Version,
