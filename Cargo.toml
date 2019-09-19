@@ -37,6 +37,7 @@ vergen = "3"
 
 [workspace]
 members = [
+    "caster",
     "rml-move",
 	"vm",
 	"mock",

@@ -41,7 +41,7 @@ pub fn create_account_txn(
         args,
         seq_num,
         gas_costs::TXN_RESERVED,
-        1,
+        0,
     )
 }
 
@@ -81,7 +81,7 @@ pub fn rotate_key_txn(
         args,
         seq_num,
         gas_costs::TXN_RESERVED,
-        1,
+        0,
     )
 }
 
@@ -102,7 +102,7 @@ pub fn mint_txn(
         args,
         seq_num,
         gas_costs::TXN_RESERVED, // this is a default for gas
-        1,                       // this is a default for gas
+        0,                       // this is a default for gas
     )
 }
 

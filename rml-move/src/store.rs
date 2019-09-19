@@ -11,10 +11,11 @@ use vm::{
 	vm_runtime::data_cache::RemoteCache,
 };
 
-use mock::account::AccountData;
-use crate::{Trait, AccessStorage};
+use mock::account::{Account, AccountData, AccountResource};
+use crate::{Trait, AccessStorage, AccessBalance, AccessSequence};
 use support::{StorageMap};
 use std::marker::PhantomData;
+use crate::exec::get_account_struct_def;
 
 #[derive(Debug)]
 pub struct AccessStore<T> {
@@ -47,6 +48,17 @@ impl<T: Trait> AccessStore<T> {
 	pub fn set(&self, access_path: AccessPath, data_blob: Vec<u8>) {
 		// serialize
 		let bytes = bincode::serialize(&access_path).expect("serialization failed");
+		if access_path.is_resource_path() {
+			let account_type = get_account_struct_def();
+			match Account::read_account_resource(&data_blob, account_type) {
+				Some(value) => {
+					<AccessBalance<T>>::insert(access_path.address.to_vec() ,AccountResource::read_balance(&value));
+					<AccessSequence<T>>::insert(access_path.address.to_vec() ,AccountResource::read_sequence_number(&value));
+				},
+				None => {},
+			}
+
+		}
 		<AccessStorage<T>>::insert(bytes, data_blob);
 	}
 

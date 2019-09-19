@@ -34,6 +34,8 @@ decl_storage! {
 		HasGenesis get(has_genesis): bool;
 		CodeStorage: map Vec<u8> => MoveModule;
 		pub AccessStorage get(access_storage): map Vec<u8> => Option<Vec<u8>>;
+		AccessBalance get(balance): map Vec<u8> => u64;
+		AccessSequence get(sequence): map Vec<u8> => u64;
 	}
 }
 

@@ -414,6 +414,10 @@ impl AccessPath {
             path,
         }
     }
+
+    pub fn is_resource_path(&self) -> bool {
+        return Self::new_for_account(self.address) == *self
+    }
 }
 
 impl fmt::Debug for AccessPath {

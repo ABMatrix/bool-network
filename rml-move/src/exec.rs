@@ -142,7 +142,7 @@ impl<T: Trait> Executor<T> {
 
 	/// TODO: This is a hack and likely to break soon. THe Account type is replicated here with no
 	/// checks that is the right now. Fix it!
-	fn get_account_struct_def() -> StructDef {
+	pub fn get_account_struct_def() -> StructDef {
 		// STRUCT DEF StructDef(StructDefInner { field_definitions: [ByteArray,
 		// Struct(StructDef(StructDefInner { field_definitions: [U64] })), U64, U64,
 		// U64] }) let coin = StructDef(StructDefInner { field_definitions:
@@ -163,4 +163,22 @@ impl<T: Trait> Executor<T> {
 	pub fn struct_def(&self) -> StructDef {
 		Self::get_account_struct_def()
 	}
+}
+
+pub fn get_account_struct_def() -> StructDef {
+	// STRUCT DEF StructDef(StructDefInner { field_definitions: [ByteArray,
+	// Struct(StructDef(StructDefInner { field_definitions: [U64] })), U64, U64,
+	// U64] }) let coin = StructDef(StructDefInner { field_definitions:
+	// [Type::U64] })
+	let int_type = Type::U64;
+	let byte_array_type = Type::ByteArray;
+	let coin = Type::Struct(StructDef::new(vec![int_type.clone()]));
+		StructDef::new(vec![
+		byte_array_type,
+		coin,
+		Type::Bool,
+		int_type.clone(),
+		int_type.clone(),
+		int_type.clone(),
+	])
 }

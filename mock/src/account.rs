@@ -80,6 +80,17 @@ impl Account {
         }
     }
 
+    pub fn from_keypair(pair: KeyPair) -> Self {
+        let privkey = pair.private_key().clone();
+        let pubkey = pair.public_key();
+        let addr = pubkey.into();
+        Account {
+            addr,
+            privkey,
+            pubkey,
+        }
+    }
+
     pub fn mock(data: &[u8]) -> Self {
         let pubkey: PublicKey = PublicKey::from_slice(data).unwrap();
         let addr = pubkey.into();
