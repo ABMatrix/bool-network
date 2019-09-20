@@ -20,6 +20,7 @@ use canonical_serialization::{
 use crate::types::transaction::TransactionArgument;
 use tiny_keccak::Keccak;
 use nextgen_crypto::{ed25519::*, VerifyingKey};
+use std::path::Display;
 
 pub mod write_set;
 pub mod vm_error;	//-
@@ -203,6 +204,12 @@ impl ModuleId {
 	pub fn address(&self) -> &AccountAddress {
 		&self.address
 	}
+}
+
+impl fmt::Display for ModuleId {
+    fn fmt(&self, f: &mut fmt::Formatter) -> std::fmt::Result {
+        write!(f, "{}.{}", self.address(), self.name())
+    }
 }
 
 impl CanonicalSerialize for ModuleId {

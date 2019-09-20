@@ -1,0 +1,16 @@
+module M {
+	public max(a: u64, b: u64): u64 {
+		if (copy(a) > copy(b)) {
+			return copy(a);
+		} else {
+			return copy(b);
+		}
+		return 0;
+	}
+
+	public sum(a: u64, b: u64): u64 {
+		let c: u64;
+		c = copy(a) + copy(b);
+		return copy(c);
+	}
+}

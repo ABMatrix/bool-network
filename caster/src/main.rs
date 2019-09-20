@@ -4,12 +4,30 @@ use core::convert::TryFrom;
 use crypto::{signing, PrivateKey, PublicKey, signing::KeyPair};
 use hex;
 use serde::{Deserialize, Serialize};
-use std::fs;
-use vm::types::{
-	AccessPath, AccountAddress, account_config::AccountResource,
+use std::{
+	fs,
+	fs::File,
+	path::{Path, PathBuf},
+	io::Write,
+	str,
 };
-use mock::common;
-use mock::account::Account;
+use vm::{
+	types::{
+	AccessPath, AccountAddress, account_config::AccountResource,
+	transaction::{Program, TransactionArgument, SignedTransaction},
+	},
+	bytecode_verifier::VerifiedModule,
+	def::file_format::CompiledModule,
+};
+use mock::{
+	common,
+	account::Account,
+	gas_costs,
+	compile::*,
+};
+use compiler;
+// use num_traits::real::Real;
+use dirs;
 
 fn main() {
 	let args = App::new("Libra Cli")
@@ -83,23 +101,23 @@ fn generate_sub_command_tx<'a, 'b>() -> App<'a, 'b> {
 				.help("sender account sequence number."),
 		)
 		.arg(
-			Arg::with_name("complied_file")
+			Arg::with_name("compiled_file")
 				.short("cf")
-				.long("complied_file")
+				.long("compiled_file")
 				.takes_value(true)
 				.help("complied file path."),
+		)
+		.arg(
+			Arg::with_name("params")
+				.short("p")
+				.long("params")
+				.takes_value(true)
+				.help("script parameters"),
 		);
 	subcommand
 }
 
-fn deal_command_make_tx(args: &ArgMatches) {
-	let key_pair = args
-		.value_of("key")
-		.map(|input| hex::decode(&input[2..]))
-		.map(|data| PrivateKey::from_slice(&data.unwrap()))
-		.map(|key| KeyPair::new(key.unwrap()))
-		.expect("should private key");
-
+fn parse_pubkey_coin(args: &ArgMatches) -> (PublicKey, u64) {
 	let receiver = args
 		.value_of("recipient")
 		.map(|input| hex::decode(&input[2..]))
@@ -113,6 +131,16 @@ fn deal_command_make_tx(args: &ArgMatches) {
 		.expect("should provide number of coins")
 		.parse()
 		.unwrap();
+	(receiver, num_coins)
+}
+
+fn deal_command_make_tx(args: &ArgMatches) {
+	let key_pair = args
+		.value_of("key")
+		.map(|input| hex::decode(&input[2..]))
+		.map(|data| PrivateKey::from_slice(&data.unwrap()))
+		.map(|key| KeyPair::new(key.unwrap()))
+		.expect("should private key");
 
 	let sequence_number = args
 		.value_of("sequence_number")
@@ -125,6 +153,7 @@ fn deal_command_make_tx(args: &ArgMatches) {
 		.expect("should provide program method")
 		{
 			"create_account" => {
+				let (receiver, num_coins) = parse_pubkey_coin(&args);
 				common::create_account_txn(
 					&Account::from_keypair(key_pair),
 					&Account::mock(&receiver.to_slice()),
@@ -132,6 +161,7 @@ fn deal_command_make_tx(args: &ArgMatches) {
 				num_coins)
 			},
 			"mint" => {
+				let (receiver, num_coins) = parse_pubkey_coin(&args);
 				common::mint_txn(
 					&Account::from_keypair(key_pair),
 					&Account::mock(&receiver.to_slice()),
@@ -140,6 +170,7 @@ fn deal_command_make_tx(args: &ArgMatches) {
 				)
 			}
 			"transfer" => {
+				let (receiver, num_coins) = parse_pubkey_coin(&args);
 				common::peer_to_peer_txn(
 					&Account::from_keypair(key_pair),
 					&Account::mock(&receiver.to_slice()),
@@ -147,10 +178,16 @@ fn deal_command_make_tx(args: &ArgMatches) {
 				num_coins
 				)
 			},
-			"publish_module" => {
-				let path = args.value_of("complied_file").unwrap();
-				let data = fs::read(path).expect("read file error");
-				serde_json::from_slice(&data).expect("decode program error.")
+			"publish" => {
+				let params = args.value_of("params").map_or(vec![], |p| {
+					parse_script_args(p).expect("invalid params")
+				});
+				compile_and_publish(
+					&Account::from_keypair(key_pair),
+					args.value_of("compiled_file").expect("should has file"),
+					params,
+					sequence_number
+				)
 			}
 			_ => unimplemented!(),
 		};
@@ -158,6 +195,72 @@ fn deal_command_make_tx(args: &ArgMatches) {
 	let se_txn = SimpleSerializer::<Vec<u8>>::serialize(&signed_txn).unwrap();
 	let hex = hex::encode(se_txn);
 	print!("0x{}", hex);
+}
+
+const APP_DIR: &str = "Caster";
+const MODULE_DIR: &str = "modules";
+
+fn home_path() -> PathBuf {
+	let root = dirs::data_local_dir().expect("should has local directory");
+	root.join(APP_DIR).join(MODULE_DIR)
+}
+
+fn parse_script_args(data: &str) -> Result<Vec<TransactionArgument>, &str> {
+
+	Ok(vec![])
+}
+
+fn load_local_modules(home: &PathBuf) -> Vec<VerifiedModule> {
+	let mut modules = vec![];
+	if home.exists() {
+		for entry in home.read_dir().expect("read_dir call failed") {
+			if let Ok(entry) = entry {
+				let data = fs::read(entry.path()).unwrap();
+				if let Ok(module) = CompiledModule::deserialize(&data) {
+					if let Ok(v_module) = VerifiedModule::new(module) {
+						modules.push(v_module);
+					} else {
+						println!("unverified module! {:?}", entry.path());
+					}
+				} else {
+					println!("unkonwn module! {:?}", entry.path());
+				}
+			}
+		}
+	}
+	modules
+}
+
+fn compile_and_publish(sender: &Account, path: &str, args: Vec<TransactionArgument>, seq_num: u64) -> SignedTransaction {
+	let path = Path::new(path);
+	let home_dir = home_path();
+	if !home_dir.exists() {
+		std::fs::create_dir_all(home_dir.clone()).unwrap();
+	}
+
+	let deps = load_local_modules(&home_dir);
+	let data = fs::read(path).expect("read file error");
+	let program = str::from_utf8(&data).unwrap();
+
+	let compiled_program = compile_inner_program_with_deps(sender.address(), &program, deps.clone());
+	// save modules
+	compiled_program.modules.into_iter().for_each(|module| {
+		let mut data:Vec<u8> = vec![];
+		module.serialize(&mut data).unwrap();
+		let path = home_dir.join(format!("{}", module.self_id()));
+		// println!("path {:?}", path);
+		let mut file = File::create(path).expect("should create file");
+		file.write_all(&data).expect("should write file");
+	});
+
+	let program = compile_program_with_deps(sender.address(), &program, args, deps);
+	// create signed transaction
+	sender.create_signed_txn_with_program(
+		program,
+		seq_num,
+		gas_costs::TXN_RESERVED, // this is a default for gas
+		0,                       // this is a default for gas
+	)
 }
 
 fn generate_sub_command_get_access_path<'a, 'b>() -> App<'a, 'b> {

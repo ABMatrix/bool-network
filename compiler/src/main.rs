@@ -132,7 +132,10 @@ fn main() {
         }
     };
 
+	println!("verify {}", args.no_verify);
+
     if !args.module_input {
+		println!("compile script##");
         let source = fs::read_to_string(args.source_path).expect("Unable to read file");
         let compiler = Compiler {
             address,
@@ -176,6 +179,8 @@ fn main() {
             }
         }
     } else {
+
+		println!("compile module##");
         let compiled_module = util::do_compile_module(&args.source_path, &address, &deps);
         let compiled_module = if !args.no_verify {
             let verified_module = do_verify_module(compiled_module, &deps);

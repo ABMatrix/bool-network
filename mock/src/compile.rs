@@ -76,6 +76,20 @@ pub fn compile_inner_program_with_address(
     compiler.into_compiled_program().unwrap()
 }
 
+pub fn compile_inner_program_with_deps(
+    address: &AccountAddress,
+    code: &str,
+    extra_deps: Vec<VerifiedModule>
+) -> CompiledProgram {
+    let compiler = Compiler {
+        address: *address,
+        code,
+        extra_deps,
+        ..Compiler::default()
+    };
+    compiler.into_compiled_program().unwrap()
+}
+
 /// Compile the provided Move code and arguments into a `Program` using `address` as the
 /// self address for any modules in `code`.
 /// extranal dependences.

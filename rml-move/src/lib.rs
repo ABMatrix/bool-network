@@ -80,7 +80,7 @@ decl_module! {
 			ensure!(txn.is_ok(), "unknown transaction");
 			let output = executor.execute_transaction(txn.expect("unknown transaction"));
 			println!("output {:?}", output);
-
+			
 			executor.apply_write_set(output.write_set());
 			Ok(())
 		}
