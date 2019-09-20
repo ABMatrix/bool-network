@@ -1,6 +1,6 @@
-# Template Node
+# Move Node
 
-A new SRML-based Substrate node, ready for hacking.
+A substrate node with move engine of libra.
 
 # Building
 
@@ -16,11 +16,9 @@ Install required tools:
 ./scripts/init.sh
 ```
 
-Build the WebAssembly binary:
-
-```bash
-./scripts/build.sh
-```
+Developing environment:
+In linux and mac: [ref](https://github.com/laddernetwork/substrate#611-linux-and-mac)  
+In Windows : [ref](https://github.com/laddernetwork/substrate#612-windows)
 
 Build all native code:
 
@@ -33,36 +31,54 @@ cargo build
 You can start a development chain with:
 
 ```bash
-cargo run -- --dev
+cargo run -- --dev --other-execution=Native --syncing-execution=Native --block-construction-execution=Native --importing-execution=Native
 ```
 
-Detailed logs may be shown by running the node with the following environment variables set: `RUST_LOG=debug RUST_BACKTRACE=1 cargo run -- --dev`.
+# Move
 
-If you want to see the multi-node consensus algorithm in action locally, then you can create a local testnet with two validator nodes for Alice and Bob, who are the initial authorities of the genesis chain that have been endowed with testnet units. Give each node a name and expose them so they are listed on the Polkadot [telemetry site](https://telemetry.polkadot.io/#/Local%20Testnet). You'll need two terminal windows open.
+You can execute your move program like in the Libra chain. Basic function is transfer coin, high grade function is deploy 
+custom program. Here is some demo how to do it.
 
-We'll start Alice's substrate node first on default TCP port 30333 with her chain database stored locally at `/tmp/alice`. The bootnode ID of her node is `QmQZ8TjTqeDj3ciwr93EJ95hxfDsb9pEYDizUAbWpigtQN`, which is generated from the `--node-key` value that we specify below:
+We also provide a caster tool that makes it easy for users to call the move function.
 
-```bash
-cargo run -- \
-  --base-path /tmp/alice \
-  --chain=local \
-  --alice \
-  --node-key 0000000000000000000000000000000000000000000000000000000000000001 \
-  --telemetry-url ws://telemetry.polkadot.io:1024 \
-  --validator
+## Transfer
+
+Goto caster directory.
+```
+cd caster
 ```
 
-In the second terminal, we'll start Bob's substrate node on a different TCP port of 30334, and with his chain database stored locally at `/tmp/bob`. We'll specify a value for the `--bootnodes` option that will connect his node to Alice's bootnode ID on TCP port 30333:
-
-```bash
-cargo run -- \
-  --base-path /tmp/bob \
-  --bootnodes /ip4/127.0.0.1/tcp/30333/p2p/QmQZ8TjTqeDj3ciwr93EJ95hxfDsb9pEYDizUAbWpigtQN \
-  --chain=local \
-  --bob \
-  --port 30334 \
-  --telemetry-url ws://telemetry.polkadot.io:1024 \
-  --validator
+First create two accounts.
+A:
+```
+cargo run -- account create
 ```
 
-Additional CLI usage options are available and may be shown by running `cargo run -- --help`.
+```
+privete: 0x4db4ef1992889d4428e400be3428843db6e89bb2e8aaf4ce8efe00df64012544
+public: 0x01add5624932fc6e5e82ea4b8b4217c2ea4372a1e4fbc9d910a38b2514931166
+address: 0x44416e28b8545d375a212c44d9719e5c21c4f44123be4993768c899bf3c02826
+```
+
+B.
+```
+cargo run -- account create
+```
+
+```
+private: 0x4db4ef1992889d4428e400be3428843db6e89bb2e8aaf4ce8efe00df6401253c
+public: 0xd0b56296877f8acefdefef06569751d8587f8f5df255179957086012b4fb7d20
+address: 0xb2c5ac79fdc6f4b8159a0500104ec59c99c5413a52423bfb2d23bc43290c6907
+```
+
+A transfers money to B and creates a transaction.
+```
+cargo run -- tx -m transfer -k 0x4db4ef1992889d4428e400be3428843db6e89bb2e8aaf4ce8efe00df64012544 -r 0xd0b56296877f8acefdefef06569751d8587f8f5df255179957086012b4fb7d20 -v 310 -s 0 > transaction
+```
+A move script will be created after execution. use [Substrate explorer](http://39.100.63.66:8096/#/explorer) to execute script.
+
+![Create Account](./res/create_account.png)
+
+## Custom
+
+Write your move script.

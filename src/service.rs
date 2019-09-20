@@ -26,7 +26,7 @@ native_executor_instance!(
 	pub Executor,
 	node_template_runtime::api::dispatch,
 	node_template_runtime::native_version,
-	include_bytes!("../runtime/wasm/target/wasm32-unknown-unknown/release/node_template_runtime_wasm.compact.wasm")
+	include_bytes!("../runtime/wasm/node_template_runtime_wasm.compact.wasm")
 );
 
 #[derive(Default)]

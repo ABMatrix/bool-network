@@ -1,6 +1,6 @@
 use crypto::{signing, PrivateKey, PublicKey, signing::KeyPair};
 use lazy_static::lazy_static;
-use std::{convert::TryInto, time::Duration};
+use std::{convert::TryInto, time::Duration, fmt};
 use vm::types::{
     AccessPath,
     AccountAddress,
@@ -265,6 +265,13 @@ impl Default for Account {
     }
 }
 
+impl fmt::Display for Account {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "private: 0x{:?}\n", self.privkey)?;
+        write!(f, "public: 0x{:?}\n", self.pubkey)?;
+        write!(f, "address: 0x{}", self.addr)
+    }
+}
 /// Represents an account along with initial state about it.
 ///
 /// `AccountData` captures the initial state needed to create accounts for tests.

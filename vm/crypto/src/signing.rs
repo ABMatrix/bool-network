@@ -274,12 +274,6 @@ impl PartialEq for PrivateKey {
 
 impl Eq for PrivateKey {}
 
-impl fmt::Display for PrivateKey {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "<elided secret>")
-    }
-}
-
 // ed25519_dalek doesn't implement Hash, which we need to put signatures into
 // containers. For now, the derive_hash_xor_eq has no impact.
 impl Hash for PublicKey {
@@ -545,7 +539,13 @@ impl<'de> de::Deserialize<'de> for Signature {
 
 impl fmt::Debug for PrivateKey {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        self.value.fmt(f)
+        write!(f, "{}", hex::encode(&self.value.to_bytes()[..]))
+    }
+}
+
+impl fmt::Display for PrivateKey {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "<elided secret>")
     }
 }
 

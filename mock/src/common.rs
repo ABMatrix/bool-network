@@ -115,19 +115,15 @@ pub fn mint_txn(
 // 	let mut args: Vec<TransactionArgument> = Vec::new();
 //     args.push(TransactionArgument::Address(*receiver.address()));
 //     args.push(TransactionArgument::U64(transfer_amount));
-
+//
 // 	// get a SignedTransaction
 //     sender.create_signed_txn_with_args(
 //         COIN.clone(),
 //         args,
 //         seq_num,
 //         gas_costs::TXN_RESERVED, // this is a default for gas
-//         1,                       // this is a default for gas
+//         0,                       // this is a default for gas
 //     )
-// }
-
-// fn coin() -> Vec<u8> {
-// 	compile_script(stdlib::coin())
 // }
 
 fn create_account() -> Vec<u8> {
