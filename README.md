@@ -131,30 +131,5 @@ To build script
 ```
 cargo run -- tx -k 0x4db4ef1992889d4428e400be3428843db6e89bb2e8aaf4ce8efe00df64012544 -m publish --compiled_file YOU_PATH\caster\scripts\s.mvir -s 0 > transaction
 ```
-privete: 0x4db4ef1992889d4428e400be3428843db6e89bb2e8aaf4ce8efe00df64012544
-public: 0x01add5624932fc6e5e82ea4b8b4217c2ea4372a1e4fbc9d910a38b2514931166
-address: 0x44416e28b8545d375a212c44d9719e5c21c4f44123be4993768c899bf3c02826
-```
-
-B.
-```
-cargo run -- account create
-```
-
-```
-private: 0x4db4ef1992889d4428e400be3428843db6e89bb2e8aaf4ce8efe00df6401253c
-public: 0xd0b56296877f8acefdefef06569751d8587f8f5df255179957086012b4fb7d20
-address: 0xb2c5ac79fdc6f4b8159a0500104ec59c99c5413a52423bfb2d23bc43290c6907
-```
-
-A transfers money to B and creates a transaction.
-```
-cargo run -- tx -m transfer -k 0x4db4ef1992889d4428e400be3428843db6e89bb2e8aaf4ce8efe00df64012544 -r 0xd0b56296877f8acefdefef06569751d8587f8f5df255179957086012b4fb7d20 -v 310 -s 0 > transaction
-```
-A move script will be created after execution. use [Substrate explorer](http://39.100.63.66:8096/#/explorer) to execute script.
-
-![Create Account](./res/create_account.png)
-
-## Custom
 
 use [Substrate explorer](http://39.100.63.66:8096/#/explorer) to execute script.
