@@ -29,7 +29,7 @@ fn main() {
     let args = App::new("bool node move cli")
         .version("0.3.0")
         .author("Jason")
-        .about("For making move transaction and assist。")
+        .about("For making move transaction and assist.")
         .subcommand(generate_sub_command_tx())
         .subcommand(generate_sub_command_get_access_path())
         .subcommand(generate_sub_command_decode())
