@@ -41,18 +41,15 @@ custom program. Here is some demo how to do it.
 
 We also provide a caster tool that makes it easy for users to call the move function.
 
-## Transfer
 
+# Demo
 Goto caster directory.
 ```
 cd caster
 ```
 
-First create two accounts.
-A:
-```
-cargo run -- account --create
-```
+
+sudo account:
 
 ```
 privete: 0x4db4ef1992889d4428e400be3428843db6e89bb2e8aaf4ce8efe00df64012544
@@ -60,7 +57,7 @@ public: 0x01add5624932fc6e5e82ea4b8b4217c2ea4372a1e4fbc9d910a38b2514931166
 address: 0x44416e28b8545d375a212c44d9719e5c21c4f44123be4993768c899bf3c02826
 ```
 
-B.
+Create a new account:
 ```
 cargo run -- account --create
 ```
@@ -71,16 +68,29 @@ public: 0xd0b56296877f8acefdefef06569751d8587f8f5df255179957086012b4fb7d20
 address: 0xb2c5ac79fdc6f4b8159a0500104ec59c99c5413a52423bfb2d23bc43290c6907
 ```
 
-A transfers money to B and creates a transaction.
+
+## Mint
+```bash
+cargo run -- tx -m mint -k 0x4db4ef1992889d4428e400be3428843db6e89bb2e8aaf4ce8efe00df64012544 -r 0x44416e28b8545d375a212c44d9719e5c21c4f44123be4993768c899bf3c02826 -v 10000 -s 0
 ```
-cargo run -- tx -m transfer -k 0x4db4ef1992889d4428e400be3428843db6e89bb2e8aaf4ce8efe00df64012544 -r 0xd0b56296877f8acefdefef06569751d8587f8f5df255179957086012b4fb7d20 -v 310 -s 0 > transaction
+A move script will be created after execution. use [Substrate explorer](http://39.100.63.66:8096/#/extrinsics) to execute script.
+
+![Execute Transaction Script](./res/execute_move_transaction.png)
+
+At  [Chain State](http://39.100.63.66:8096/#/chainstate) page, you can see the new account balance.
+![Check Chain Statet](./res/check_chain_state.png)
+
+
+## Transfer
+
+```bash
+cargo run -- tx -m transfer -k 0x4db4ef1992889d4428e400be3428843db6e89bb2e8aaf4ce8efe00df64012544 -r 0xb2c5ac79fdc6f4b8159a0500104ec59c99c5413a52423bfb2d23bc43290c6907 -v 100 -s 0
 ```
-A move script will be created after execution. use [Substrate explorer](http://39.100.63.66:8096/#/explorer) to execute script.
+use [Substrate explorer](http://39.100.63.66:8096/#/extrinsics) to execute script.
 
-![Create Account](./res/create_account.png)
+At  [Chain State](http://39.100.63.66:8096/#/chainstate) page, you can see the new account balance.
 
-## Custom
-
+## Publish Custom Module
 Write your move module.
 ```
 module M {
@@ -102,34 +112,36 @@ module M {
 ```
 
 To build module
+```bash
+cargo run -- tx -k 0x4db4ef1992889d4428e400be3428843db6e89bb2e8aaf4ce8efe00df64012544 -m publish --compiled_file ./scripts/m.mvir -s 1
 ```
-cargo run -- tx -k 0x4db4ef1992889d4428e400be3428843db6e89bb2e8aaf4ce8efe00df64012544 -m publish --compiled_file YOU_PATH\caster\scripts\m.mvir -s 0 > transaction
-```
-use [Substrate explorer](http://39.100.63.66:8096/#/explorer) to execute script.
+use [Substrate explorer](http://39.100.63.66:8096/#/extrinsics) to execute script.
 
+## Call Custom Module
 Write your move script to call module.
 ```
+import 0x0.LibraAccount;
 import 0x44416e28b8545d375a212c44d9719e5c21c4f44123be4993768c899bf3c02826.M;
 
 main() {
 	let a: u64;
 	let b: u64;
-	let c: u64;
-	let d: u64;
+	let amount: u64;
+    let payee:address;
 
 	a = 10;
 	b = 2;
-	c = M.max(copy(a), copy(b));
-	d = M.sum(copy(a), copy(b));
-	assert(copy(c) == 10, 42);
-	assert(copy(d) == 12, 42);
-	return;
+	amount = M.sum(copy(a), copy(b));
+    payee = 0x1;
+
+    LibraAccount.pay_from_sender(move(payee), move(amount));
+    return;
 }
 ```
-
-To build script
+```bash
+cargo run -- tx -k 0x4db4ef1992889d4428e400be3428843db6e89bb2e8aaf4ce8efe00df64012544 -m publish --compiled_file ./scripts/s.mvir -s 2
 ```
-cargo run -- tx -k 0x4db4ef1992889d4428e400be3428843db6e89bb2e8aaf4ce8efe00df64012544 -m publish --compiled_file YOU_PATH\caster\scripts\s.mvir -s 0 > transaction
-```
+use [Substrate explorer](http://39.100.63.66:8096/#/extrinsics) to execute script.
 
-use [Substrate explorer](http://39.100.63.66:8096/#/explorer) to execute script.
+At  [Chain State](http://39.100.63.66:8096/#/chainstate) page, you can see the new account balance.
+
