@@ -1,16 +1,17 @@
+import 0x0.LibraAccount;
 import 0x44416e28b8545d375a212c44d9719e5c21c4f44123be4993768c899bf3c02826.M;
 
 main() {
 	let a: u64;
 	let b: u64;
-	let c: u64;
-	let d: u64;
+	let amount: u64;
+    let payee:address;
 
 	a = 10;
 	b = 2;
-	c = M.max(copy(a), copy(b));
-	d = M.sum(copy(a), copy(b));
-	assert(copy(c) == 10, 42);
-	assert(copy(d) == 12, 42);
-	return;
+	amount = M.sum(copy(a), copy(b));
+    payee = 0x1;
+
+    LibraAccount.pay_from_sender(move(payee), move(amount));
+    return;
 }
