@@ -1,1 +1,3 @@
-../target/release/caster tx -m mint -k 0x4db4ef1992889d4428e400be3428843db6e89bb2e8aaf4ce8efe00df64012544 -r 0x01add5624932fc6e5e82ea4b8b4217c2ea4372a1e4fbc9d910a38b2514931166 -v 100 -s 0
+#!/usr/bin/env bash
+
+../target/release/caster tx -m mint -k 0x4db4ef1992889d4428e400be3428843db6e89bb2e8aaf4ce8efe00df64012544 -r 0x44416e28b8545d375a212c44d9719e5c21c4f44123be4993768c899bf3c02826 -v 10000 -s 0
