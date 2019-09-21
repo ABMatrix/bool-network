@@ -106,9 +106,9 @@ impl<T: Trait> Module<T> {
         let executor;
         if !<HasGenesis<T>>::get() {
             executor = Executor::from_genesis_file();
+            <HasGenesis<T>>::put(true);
         } else {
             executor = Executor::no_genesis();
-            <HasGenesis<T>>::put(true);
         }
         executor
     }

@@ -39,11 +39,11 @@ vergen = "3"
 members = [
     "caster",
     "rml-move",
-	"vm",
-	"mock",
-	"vm/crypto",
-	"vm/nextgen_crypto",
-	"compiler",
-	"compiler/ir_to_bytecode",
-	"compiler/stdlib",
+    "vm",
+    "mock",
+    "vm/crypto",
+    "vm/nextgen_crypto",
+    "compiler",
+    "compiler/ir_to_bytecode",
+    "compiler/stdlib",
 ]
