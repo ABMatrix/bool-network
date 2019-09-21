@@ -166,7 +166,7 @@ fn deal_command_make_tx(args: &ArgMatches) {
             let (receiver, num_coins) = parse_address_coin(&args);
             common::create_account_txn(
                 &Account::from_keypair(key_pair),
-                &Account::mock_from_address(&receiver.to_slice()),
+                &Account::mock_from_address(receiver),
                 sequence_number,
                 num_coins,
             )
@@ -175,7 +175,7 @@ fn deal_command_make_tx(args: &ArgMatches) {
             let (receiver, num_coins) = parse_address_coin(&args);
             common::mint_txn(
                 &Account::from_keypair(key_pair),
-                &Account::mock_from_address(&receiver.to_slice()),
+                &Account::mock_from_address(receiver),
                 sequence_number,
                 num_coins,
             )
@@ -184,7 +184,7 @@ fn deal_command_make_tx(args: &ArgMatches) {
             let (receiver, num_coins) = parse_address_coin(&args);
             common::peer_to_peer_txn(
                 &Account::from_keypair(key_pair),
-                &Account::mock_from_address(&receiver.to_slice()),
+                &Account::mock_from_address(receiver),
                 sequence_number,
                 num_coins,
             )

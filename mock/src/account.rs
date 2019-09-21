@@ -1,7 +1,12 @@
 use crypto::{signing, signing::KeyPair, PrivateKey, PublicKey};
+use failure::prelude::*;
 use lazy_static::lazy_static;
 use rand::{rngs::StdRng, SeedableRng};
-use std::{convert::TryInto, fmt, time::Duration};
+use std::{
+    convert::{TryFrom, TryInto},
+    fmt,
+    time::Duration,
+};
 use vm::types::{
     account_config,
     transaction::{Program, RawTransaction, SignedTransaction, TransactionArgument},
@@ -85,10 +90,20 @@ impl Account {
         }
     }
 
-    pub fn mock(data: &[u8]) -> Self {
-        let pubkey: PublicKey = PublicKey::from_slice(data).unwrap();
+    pub fn mock(data: &[u8]) -> Result<Self> {
+        let pubkey: PublicKey = PublicKey::from_slice(data)?;
         let addr = pubkey.into();
-        let privkey = PrivateKey::from_slice(data).unwrap();
+        let privkey = PrivateKey::from_slice(data)?;
+        Ok(Account {
+            addr,
+            privkey,
+            pubkey,
+        })
+    }
+
+    /// This function is only used for testing, private key and address do not correspond
+    pub fn mock_from_address(addr: AccountAddress) -> Self {
+        let (privkey, pubkey) = crypto::signing::generate_keypair();
         Account {
             addr,
             privkey,
