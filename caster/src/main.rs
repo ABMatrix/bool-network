@@ -26,10 +26,10 @@ use vm::{
 use dirs;
 
 fn main() {
-    let args = App::new("Libra Cli")
-        .version("0.2.1")
+    let args = App::new("bool node move cli")
+        .version("0.3.0")
         .author("Jason")
-        .about("Libra cli for making transaction code or decoding account status.")
+        .about("For making move transaction and assist。")
         .subcommand(generate_sub_command_tx())
         .subcommand(generate_sub_command_get_access_path())
         .subcommand(generate_sub_command_decode())
@@ -118,7 +118,22 @@ fn parse_pubkey_coin(args: &ArgMatches) -> (PublicKey, u64) {
         .value_of("recipient")
         .map(|input| hex::decode(&input[2..]))
         .map(|data| PublicKey::from_slice(&data.unwrap()))
-        .expect("should has public key ")
+        .expect("parse recipient public key error")
+        .unwrap();
+
+    let num_coins = args
+        .value_of("value")
+        .expect("should provide number of coins")
+        .parse()
+        .unwrap();
+    (receiver, num_coins)
+}
+
+fn parse_address_coin(args: &ArgMatches) -> (AccountAddress, u64) {
+    let receiver = args
+        .value_of("recipient")
+        .map(|input| AccountAddress::from_hex_literal(input))
+        .expect("parse recipient address error")
         .unwrap();
 
     let num_coins = args
@@ -148,28 +163,28 @@ fn deal_command_make_tx(args: &ArgMatches) {
         .expect("should provide program method")
     {
         "create_account" => {
-            let (receiver, num_coins) = parse_pubkey_coin(&args);
+            let (receiver, num_coins) = parse_address_coin(&args);
             common::create_account_txn(
                 &Account::from_keypair(key_pair),
-                &Account::mock(&receiver.to_slice()),
+                &Account::mock_from_address(&receiver.to_slice()),
                 sequence_number,
                 num_coins,
             )
         }
         "mint" => {
-            let (receiver, num_coins) = parse_pubkey_coin(&args);
+            let (receiver, num_coins) = parse_address_coin(&args);
             common::mint_txn(
                 &Account::from_keypair(key_pair),
-                &Account::mock(&receiver.to_slice()),
+                &Account::mock_from_address(&receiver.to_slice()),
                 sequence_number,
                 num_coins,
             )
         }
         "transfer" => {
-            let (receiver, num_coins) = parse_pubkey_coin(&args);
+            let (receiver, num_coins) = parse_address_coin(&args);
             common::peer_to_peer_txn(
                 &Account::from_keypair(key_pair),
-                &Account::mock(&receiver.to_slice()),
+                &Account::mock_from_address(&receiver.to_slice()),
                 sequence_number,
                 num_coins,
             )
