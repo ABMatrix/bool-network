@@ -1,5 +1,5 @@
 // auto-generated: "lalrpop 0.16.3"
-// sha256: 22cf8b345df1d0b24121556d293bf108fbcab8978def1236c917aa5be541
+// sha256: 3cb2290d3ab3ffe7a914617f56789bb75162d95ee21c1d5b69d2f07e623b45
 use std::str::FromStr;
 use std::collections::BTreeMap;
 use std::convert::TryFrom;

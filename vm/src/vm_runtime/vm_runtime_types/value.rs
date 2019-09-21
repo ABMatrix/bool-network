@@ -1,26 +1,22 @@
 // Copyright (c) The Libra Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 
-use crate::vm_runtime::loaded_data::{struct_def::StructDef, types::Type};
-use std::{
-    cell::{Ref, RefCell},
-    ops::Add,
-    rc::Rc,
-};
-use crate::types::{
-    AccessPath,
-    AccountAddress,
-	ADDRESS_LENGTH,
-    ByteArray,
-    contract_event::ContractEvent,
-};
-use crate::try_runtime;
 use crate::def::{
     errors::*,
     gas_schedule::{
         words_in, AbstractMemorySize, GasAlgebra, GasCarrier, CONST_SIZE, REFERENCE_SIZE,
         STRUCT_SIZE,
     },
+};
+use crate::try_runtime;
+use crate::types::{
+    contract_event::ContractEvent, AccessPath, AccountAddress, ByteArray, ADDRESS_LENGTH,
+};
+use crate::vm_runtime::loaded_data::{struct_def::StructDef, types::Type};
+use std::{
+    cell::{Ref, RefCell},
+    ops::Add,
+    rc::Rc,
 };
 
 // #[cfg(test)]

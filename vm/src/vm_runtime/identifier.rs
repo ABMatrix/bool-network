@@ -2,12 +2,8 @@
 // SPDX-License-Identifier: Apache-2.0
 //! A bunch of helper functions to fetch the storage key for move resources and values.
 
-use crate::types::{
-    AccessPath, Accesses,
-    AccountAddress,
-    ResourceKey, StructTag,
-};
 use crate::def::{access::ModuleAccess, file_format::StructDefinitionIndex};
+use crate::types::{AccessPath, Accesses, AccountAddress, ResourceKey, StructTag};
 
 /// Get the StructTag for a StructDefinition defined in a published module.
 pub fn resource_storage_key(module: &impl ModuleAccess, idx: StructDefinitionIndex) -> StructTag {

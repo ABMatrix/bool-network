@@ -1,5 +1,6 @@
 use crate::account::{Account, AccountData, AccountResource, ALICE, BOB, GENESIS_KEYPAIR};
-use crypto::{signing, PrivateKey, PublicKey, signing::KeyPair};
+use crate::data_store::FakeDataStore;
+use crypto::{signing, signing::KeyPair, PrivateKey, PublicKey};
 use stdlib::{
     stdlib_modules,
     transaction_scripts::{
@@ -7,21 +8,15 @@ use stdlib::{
         ROTATE_AUTHENTICATION_KEY_TXN_BODY,
     },
 };
-use vm_cache_map::Arena;
-use crate::data_store::FakeDataStore;
 use vm::{
-    types::{
-        AccessPath,
-        AccountAddress,
-        account_config,
-        ByteArray,
-        transaction::{
-            Program, RawTransaction, SignatureCheckedTransaction, TransactionArgument,
-        },
-        SCRIPT_HASH_LENGTH,
-        write_set::{WriteOp, WriteSet}
-    },
     def::{access::ModuleAccess, transaction_metadata::TransactionMetadata},
+    types::{
+        account_config,
+        transaction::{Program, RawTransaction, SignatureCheckedTransaction, TransactionArgument},
+        write_set::{WriteOp, WriteSet},
+        AccessPath, AccountAddress, ByteArray, SCRIPT_HASH_LENGTH,
+    },
+    vm_runtime::vm_runtime_types::value::Local,
     vm_runtime::{
         code_cache::{
             module_adapter::FakeFetcher,
@@ -30,13 +25,10 @@ use vm::{
         data_cache::BlockDataCache,
         txn_executor::{TransactionExecutor, ACCOUNT_MODULE, COIN_MODULE},
     },
-    vm_runtime::vm_runtime_types::value::Local,
 };
+use vm_cache_map::Arena;
 
-pub fn create_genesis_write_set(
-    private_key: &PrivateKey,
-    public_key: PublicKey,
-) -> WriteSet {
+pub fn create_genesis_write_set(private_key: &PrivateKey, public_key: PublicKey) -> WriteSet {
     // TODO: Currently validator set is unused because MoveVM doesn't support collections for now.
     //       Fix it later when we have collections.
 

@@ -1,5 +1,5 @@
-use failure::prelude::*;
 use crate::types::AccessPath;
+use failure::prelude::*;
 
 /// `StateView` is a trait that defines a read-only snapshot of the global state. It is passed to
 /// the VM for transaction execution, during which the VM is guaranteed to read anything at the

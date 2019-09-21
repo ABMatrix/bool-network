@@ -1,33 +1,33 @@
 pub mod config; //-
 
+pub mod code_cache; //--
+pub mod counters; //-
+pub mod data_cache; //--
+pub mod execution_stack;
+pub mod frame; //--
+pub mod gas_meter; //--
 pub mod identifier;
-pub mod op_metrics;		//-
-pub mod loaded_data;	//-
-pub mod counters;	//-
-pub mod vm_runtime_types; //-
-pub mod code_cache;	//--
-pub mod data_cache;	//--
+pub mod loaded_data; //-
+pub mod op_metrics; //-
 pub mod process_txn; //--
-pub mod gas_meter; 	//--
-pub mod frame;				//--
-pub mod execution_stack;	//--
+pub mod vm_runtime_types; //- //--
 
-pub mod txn_executor;
-pub mod block_processor;	//--
-pub mod runtime;			//---
+pub mod block_processor; //--
 pub mod move_vm;
+pub mod runtime; //---
+pub mod txn_executor;
 
 pub use move_vm::MoveVM;
 pub use process_txn::verify::static_verify_program;
 pub use txn_executor::execute_function;
 
-use crate::vm_runtime::config::VMConfig;
 use crate::def::{errors::VMInvariantViolation, IndexKind};
 use crate::state_view::StateView;
 use crate::types::{
     transaction::{SignedTransaction, TransactionOutput},
     vm_error::VMStatus,
 };
+use crate::vm_runtime::config::VMConfig;
 
 pub(crate) fn bounded_fetch<T>(
     pool: &[T],

@@ -1,7 +1,7 @@
 use super::dispatch::NativeReturnStatus;
+use crate::types::{AccountAddress, ByteArray};
 use crate::vm_runtime::vm_runtime_types::value::Local;
 use std::collections::VecDeque;
-use crate::types::{AccountAddress, ByteArray};
 
 pub fn native_bytearray_concat(mut arguments: VecDeque<Local>) -> NativeReturnStatus {
     if arguments.len() != 2 {

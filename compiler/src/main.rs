@@ -8,12 +8,12 @@ use std::{convert::TryFrom, fs, io::Write, path::PathBuf};
 use stdlib::stdlib_modules;
 use structopt::StructOpt;
 use vm::{
-	bytecode_verifier::{
-	verifier::{verify_module_dependencies, VerifiedProgram},
-	VerifiedModule,
-	},
-	types::{AccessPath, AccountAddress, transaction::Program},
-	def::{errors::VerificationError, file_format::CompiledModule},
+    bytecode_verifier::{
+        verifier::{verify_module_dependencies, VerifiedProgram},
+        VerifiedModule,
+    },
+    def::{errors::VerificationError, file_format::CompiledModule},
+    types::{transaction::Program, AccessPath, AccountAddress},
 };
 
 #[derive(Debug, StructOpt)]
@@ -132,10 +132,10 @@ fn main() {
         }
     };
 
-	println!("verify {}", args.no_verify);
+    println!("verify {}", args.no_verify);
 
     if !args.module_input {
-		println!("compile script##");
+        println!("compile script##");
         let source = fs::read_to_string(args.source_path).expect("Unable to read file");
         let compiler = Compiler {
             address,
@@ -179,8 +179,7 @@ fn main() {
             }
         }
     } else {
-
-		println!("compile module##");
+        println!("compile module##");
         let compiled_module = util::do_compile_module(&args.source_path, &address, &deps);
         let compiled_module = if !args.no_verify {
             let verified_module = do_verify_module(compiled_module, &deps);

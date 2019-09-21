@@ -1,26 +1,25 @@
-
 pub mod account;
-pub mod data_store;
-pub mod executor;
 pub mod common;
 pub mod compile;
+pub mod data_store;
+pub mod executor;
 pub mod gas_costs;
 pub mod genesis;
 
-use failure::prelude::*;
 use compiler::Compiler;
 use data_store::FakeDataStore;
+use failure::prelude::*;
 use vm::{
-	bytecode_verifier::{VerifiedModule, VerifiedScript},
-	def::{
-    errors::*,
-    file_format::{CompiledModule, CompiledScript},
-	},
-	types::{
-    AccessPath, AccountAddress,
-    transaction::{Program, TransactionArgument},
-	},
-	vm_runtime::{execute_function, static_verify_program},
+    bytecode_verifier::{VerifiedModule, VerifiedScript},
+    def::{
+        errors::*,
+        file_format::{CompiledModule, CompiledScript},
+    },
+    types::{
+        transaction::{Program, TransactionArgument},
+        AccessPath, AccountAddress,
+    },
+    vm_runtime::{execute_function, static_verify_program},
 };
 
 /// Compiles a program with the given arguments and executes it in the VM.

@@ -11,8 +11,8 @@ use super::{
         StringPoolIndex, StructHandle, StructHandleIndex,
     },
 };
-use std::collections::BTreeMap;
 use crate::types::AccountAddress;
+use std::collections::BTreeMap;
 
 /// Resolution context for importing types
 pub struct Resolver {

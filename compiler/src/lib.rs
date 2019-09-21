@@ -8,12 +8,12 @@ use ir_to_bytecode::{compiler::compile_program, parser::parse_program};
 use std::mem;
 use stdlib::stdlib_modules;
 use vm::{
-	bytecode_verifier::VerifiedModule,
-	types::{
-	AccountAddress,
-	transaction::{Program, TransactionArgument},
-	},
-	def::file_format::CompiledProgram,
+    bytecode_verifier::VerifiedModule,
+    def::file_format::CompiledProgram,
+    types::{
+        transaction::{Program, TransactionArgument},
+        AccountAddress,
+    },
 };
 
 /// An API for the compiler. Supports setting custom options.

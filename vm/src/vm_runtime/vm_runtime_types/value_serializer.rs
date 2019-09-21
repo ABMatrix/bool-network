@@ -1,15 +1,13 @@
 // Copyright (c) The Libra Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 
-use crate::vm_runtime::{
-    loaded_data::{struct_def::StructDef, types::Type},
-};
 use super::value::{MutVal, Value};
+use crate::def::errors::*;
+use crate::types::{AccountAddress, ByteArray};
+use crate::vm_runtime::loaded_data::{struct_def::StructDef, types::Type};
 use canonical_serialization::*;
 use failure::prelude::*;
 use std::convert::TryFrom;
-use crate::types::{AccountAddress, ByteArray};
-use crate::def::errors::*;
 
 impl Value {
     /// Serialize this value using `SimpleSerializer`.

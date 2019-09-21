@@ -297,7 +297,11 @@ impl FunctionDefinition {
                     LdStr(idx) => check_bounds_impl(&module.string_pool, *idx),
                     BorrowField(idx) => check_bounds_impl(&module.field_defs, *idx),
                     Call(idx, _) => check_bounds_impl(&module.function_handles, *idx), // FIXME: check bounds for type actuals?
-                    Pack(idx, _) | Unpack(idx, _) | Exists(idx, _) | BorrowGlobal(idx, _) | MoveFrom(idx, _)
+                    Pack(idx, _)
+                    | Unpack(idx, _)
+                    | Exists(idx, _)
+                    | BorrowGlobal(idx, _)
+                    | MoveFrom(idx, _)
                     | MoveToSender(idx, _) => check_bounds_impl(&module.struct_defs, *idx),
                     // Instructions that refer to this code block.
                     BrTrue(offset) | BrFalse(offset) | Branch(offset) => {

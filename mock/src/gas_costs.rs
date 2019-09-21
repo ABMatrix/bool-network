@@ -9,7 +9,7 @@ use crate::{
     executor::FakeExecutor,
 };
 use lazy_static::lazy_static;
-use vm::types::{AccountAddress, transaction::SignedTransaction};
+use vm::types::{transaction::SignedTransaction, AccountAddress};
 
 /// The gas each transaction is configured to reserve. If the gas available in the account,
 /// converted to microlibra, falls below this threshold, transactions are expected to fail with

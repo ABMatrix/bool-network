@@ -3,11 +3,9 @@
 
 #![allow(clippy::unit_arg)]
 use super::{
-    AccessPath,
-    AccountEvent,
     ledger_info::LedgerInfo,
     proof::{verify_event, EventProof},
-    Version,
+    AccessPath, AccountEvent, Version,
 };
 use canonical_serialization::{
     CanonicalSerialize, CanonicalSerializer, SimpleDeserializer, SimpleSerializer,

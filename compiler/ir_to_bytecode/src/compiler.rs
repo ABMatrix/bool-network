@@ -20,24 +20,21 @@ use std::{
     },
 };
 use vm::{
-	types::{
-		AccountAddress, 
-		ByteArray
-	},
-	def::{
-		access::ModuleAccess,
-		file_format::{
-			AddressPoolIndex, ByteArrayPoolIndex, Bytecode, CodeUnit, CompiledModule,
-			CompiledModuleMut, CompiledProgram, CompiledScriptMut, FieldDefinition,
-			FieldDefinitionIndex, FunctionDefinition, FunctionDefinitionIndex, FunctionHandle,
-			FunctionHandleIndex, FunctionSignature, FunctionSignatureIndex, Kind, LocalsSignature,
-			LocalsSignatureIndex, MemberCount, ModuleHandle, ModuleHandleIndex, SignatureToken,
-			StringPoolIndex, StructDefinition, StructDefinitionIndex, StructFieldInformation,
-			StructHandle, StructHandleIndex, TableIndex, TypeSignature, TypeSignatureIndex,
-			NO_TYPE_ACTUALS, SELF_MODULE_NAME,
-		},
-		printers::TableAccess,
-	}
+    def::{
+        access::ModuleAccess,
+        file_format::{
+            AddressPoolIndex, ByteArrayPoolIndex, Bytecode, CodeUnit, CompiledModule,
+            CompiledModuleMut, CompiledProgram, CompiledScriptMut, FieldDefinition,
+            FieldDefinitionIndex, FunctionDefinition, FunctionDefinitionIndex, FunctionHandle,
+            FunctionHandleIndex, FunctionSignature, FunctionSignatureIndex, Kind, LocalsSignature,
+            LocalsSignatureIndex, MemberCount, ModuleHandle, ModuleHandleIndex, SignatureToken,
+            StringPoolIndex, StructDefinition, StructDefinitionIndex, StructFieldInformation,
+            StructHandle, StructHandleIndex, TableIndex, TypeSignature, TypeSignatureIndex,
+            NO_TYPE_ACTUALS, SELF_MODULE_NAME,
+        },
+        printers::TableAccess,
+    },
+    types::{AccountAddress, ByteArray},
 };
 
 #[derive(Debug, Default)]

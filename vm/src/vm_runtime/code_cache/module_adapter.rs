@@ -3,11 +3,11 @@
 //! Fetches code data from the blockchain.
 
 // use logger::prelude::*;
-use log::{error};
-use crate::state_view::StateView;
-use std::collections::HashMap;
-use crate::types::ModuleId;
 use crate::def::file_format::CompiledModule;
+use crate::state_view::StateView;
+use crate::types::ModuleId;
+use log::error;
+use std::collections::HashMap;
 
 /// Trait that describes how the VM expects code data to be stored.
 pub trait ModuleFetcher {

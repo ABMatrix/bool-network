@@ -8,9 +8,9 @@
 //! `CompiledModule`.
 
 use super::{file_format::*, file_format_common::*};
+use crate::types::{AccountAddress, ByteArray};
 use failure::*;
 use std::ops::Deref;
-use crate::types::{AccountAddress, ByteArray};
 
 impl CompiledScript {
     /// Serializes a `CompiledScript` into a binary. The mutable `Vec<u8>` will contain the

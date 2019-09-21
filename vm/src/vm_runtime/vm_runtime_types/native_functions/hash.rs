@@ -2,11 +2,11 @@
 // SPDX-License-Identifier: Apache-2.0
 
 use super::dispatch::NativeReturnStatus;
+use crate::types::ByteArray;
 use crate::vm_runtime::vm_runtime_types::value::Local;
 use bitcoin_hashes::{hash160, sha256, Hash};
 use std::{borrow::Borrow, collections::VecDeque};
 use tiny_keccak::Keccak;
-use crate::types::ByteArray;
 
 const HASH_LENGTH: usize = 32;
 const KECCAK_COST: u64 = 30;

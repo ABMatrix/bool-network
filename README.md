@@ -51,7 +51,7 @@ cd caster
 First create two accounts.
 A:
 ```
-cargo run -- account create
+cargo run -- account --create
 ```
 
 ```
@@ -62,7 +62,7 @@ address: 0x44416e28b8545d375a212c44d9719e5c21c4f44123be4993768c899bf3c02826
 
 B.
 ```
-cargo run -- account create
+cargo run -- account --create
 ```
 
 ```

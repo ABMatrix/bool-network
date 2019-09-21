@@ -3,7 +3,6 @@
 
 //! Types and data used by the VM runtime
 
-
 mod value_serializer;
 
 // #[cfg(any(test, feature = "testing"))]

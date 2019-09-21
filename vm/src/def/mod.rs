@@ -4,13 +4,13 @@ pub mod access;
 pub mod check_bounds;
 #[macro_use]
 pub mod errors;
-pub mod serializer;
 pub mod deserializer;
 pub mod file_format;
 pub mod file_format_common;
 pub mod gas_schedule;
 pub mod internals;
 pub mod printers;
+pub mod serializer;
 // #[cfg(any(test, feature = "testing"))]
 // pub mod proptest_types;
 pub mod resolver;
@@ -35,7 +35,6 @@ pub enum IndexKind {
     LocalPool,
     CodeDefinition,
 }
-
 
 impl IndexKind {
     pub fn variants() -> &'static [IndexKind] {

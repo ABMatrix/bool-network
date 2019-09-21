@@ -2,19 +2,19 @@
 // SPDX-License-Identifier: Apache-2.0
 //! Cache for commonly executed scripts
 
-use crate::vm_runtime::loaded_data::{
-    function::{FunctionRef, FunctionReference},
-    loaded_module::LoadedModule,
-};
 use crate::bytecode_verifier::VerifiedScript;
-use log::{info,trace, error, warn};
-use tiny_keccak::Keccak;
-use crate::types::SCRIPT_HASH_LENGTH;
-use crate::try_runtime;
 use crate::def::{
     errors::{Location, VMErrorKind, VMResult, VMRuntimeError, VerificationStatus},
     file_format::CompiledScript,
 };
+use crate::try_runtime;
+use crate::types::SCRIPT_HASH_LENGTH;
+use crate::vm_runtime::loaded_data::{
+    function::{FunctionRef, FunctionReference},
+    loaded_module::LoadedModule,
+};
+use log::{error, info, trace, warn};
+use tiny_keccak::Keccak;
 use vm_cache_map::{Arena, CacheMap};
 
 /// The cache for commonly executed scripts. Currently there's no eviction policy, and it maps

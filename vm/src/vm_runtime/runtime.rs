@@ -8,18 +8,18 @@ use super::{
         module_cache::{BlockModuleCache, VMModuleCache},
         script_cache::ScriptCache,
     },
+    config::{VMConfig, VMPublishingOption},
     counters::report_verification_status,
     data_cache::BlockDataCache,
     loaded_data::loaded_module::LoadedModule,
     process_txn::{validate::ValidationMode, ProcessTransaction},
-	config::{VMConfig, VMPublishingOption},
 };
-use log::{info, error, trace, warn, debug};
 use crate::state_view::StateView;
 use crate::types::{
     transaction::{SignedTransaction, TransactionOutput},
     vm_error::{VMStatus, VMValidationStatus},
 };
+use log::{debug, error, info, trace, warn};
 use vm_cache_map::Arena;
 
 /// An instantiation of the MoveVM.

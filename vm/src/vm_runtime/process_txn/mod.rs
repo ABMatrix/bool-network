@@ -1,13 +1,9 @@
+use crate::types::{transaction::SignatureCheckedTransaction, vm_error::VMStatus};
 use crate::vm_runtime::{
-    code_cache::module_cache::ModuleCache, data_cache::RemoteCache,
+    code_cache::module_cache::ModuleCache, config::VMPublishingOption, data_cache::RemoteCache,
     loaded_data::loaded_module::LoadedModule,
-	config::VMPublishingOption,
 };
 use std::marker::PhantomData;
-use crate::types::{
-	transaction::SignatureCheckedTransaction,
-	vm_error::VMStatus,
-};
 use vm_cache_map::Arena;
 
 pub mod execute;

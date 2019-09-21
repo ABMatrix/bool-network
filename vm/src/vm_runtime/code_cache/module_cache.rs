@@ -2,20 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 //! Cache for modules published on chain.
 
-use log::{error};
-use crate::vm_runtime::{
-    code_cache::module_adapter::{ModuleFetcher, NullFetcher},
-    gas_meter::GasMeter,
-    loaded_data::{
-        function::{FunctionRef, FunctionReference},
-        loaded_module::LoadedModule,
-		struct_def::StructDef, types::Type,
-    },
-};
 use crate::bytecode_verifier::VerifiedModule;
-use std::marker::PhantomData;
-use crate::types::ModuleId;
-use crate::try_runtime;
 use crate::def::{
     access::ModuleAccess,
     errors::*,
@@ -25,6 +12,20 @@ use crate::def::{
     },
     views::{FunctionHandleView, StructHandleView},
 };
+use crate::try_runtime;
+use crate::types::ModuleId;
+use crate::vm_runtime::{
+    code_cache::module_adapter::{ModuleFetcher, NullFetcher},
+    gas_meter::GasMeter,
+    loaded_data::{
+        function::{FunctionRef, FunctionReference},
+        loaded_module::LoadedModule,
+        struct_def::StructDef,
+        types::Type,
+    },
+};
+use log::error;
+use std::marker::PhantomData;
 use vm_cache_map::{Arena, CacheRefMap};
 
 // #[cfg(test)]

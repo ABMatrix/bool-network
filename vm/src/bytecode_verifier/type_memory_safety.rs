@@ -9,7 +9,6 @@ use super::{
     control_flow_graph::VMControlFlowGraph,
     nonce::Nonce,
 };
-use std::collections::{BTreeMap, BTreeSet};
 use crate::def::{
     access::ModuleAccess,
     errors::VMStaticViolation,
@@ -19,6 +18,7 @@ use crate::def::{
         StructDefinitionView, ViewInternals,
     },
 };
+use std::collections::{BTreeMap, BTreeSet};
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 struct StackAbstractValue {

@@ -18,7 +18,7 @@ use crate::types::{
     contract_event::ContractEvent,
     ledger_info::LedgerInfo,
     transaction::{TransactionInfo, TransactionListWithProof},
-	Version,
+    Version,
 };
 use crypto::{
     hash::{

@@ -5,11 +5,10 @@
 
 use crate::{account::Account, compile::compile_script, gas_costs};
 use lazy_static::lazy_static;
-use stdlib::{transaction_scripts};
+use stdlib::transaction_scripts;
 use vm::types::{
-    AccountAddress,
-    ByteArray,
     transaction::{SignedTransaction, TransactionArgument},
+    AccountAddress, ByteArray,
 };
 
 lazy_static! {
@@ -22,7 +21,7 @@ lazy_static! {
     pub static ref PEER_TO_PEER: Vec<u8> = { peer_to_peer() };
     /// A serialized transaction to change the keys for an account.
     pub static ref ROTATE_KEY: Vec<u8> = { rotate_key() };
-	// pub static ref COIN: Vec<u8> = { coin() };
+    // pub static ref COIN: Vec<u8> = { coin() };
 }
 
 /// Returns a transaction to create a new account with the given arguments.

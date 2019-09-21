@@ -6,11 +6,10 @@
 #[cfg(any(test, feature = "testing"))]
 use crate::types::account_config::{account_resource_path, AccountResource};
 use crate::types::{
-    AccountAddress,
+    account_config::get_account_resource_or_default,
     ledger_info::LedgerInfo,
-	account_config::get_account_resource_or_default,
     proof::{verify_account_state, AccountStateProof},
-    Version,
+    AccountAddress, Version,
 };
 
 use canonical_serialization::{SimpleDeserializer, SimpleSerializer};

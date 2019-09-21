@@ -2,15 +2,14 @@
 // SPDX-License-Identifier: Apache-2.0
 
 //! Gas metering logic for the Move VM.
+use super::vm_runtime_types::value::Local;
 use super::{
-    code_cache::module_cache::ModuleCache, 
-	execution_stack::ExecutionStack,
+    code_cache::module_cache::ModuleCache, execution_stack::ExecutionStack,
     loaded_data::function::FunctionReference,
 };
-use crate::types::ADDRESS_LENGTH;
-use crate::try_runtime;
 use crate::def::{access::ModuleAccess, errors::*, file_format::Bytecode, gas_schedule::*};
-use super::vm_runtime_types::value::Local;
+use crate::try_runtime;
+use crate::types::ADDRESS_LENGTH;
 
 /// Holds the state of the gas meter.
 pub struct GasMeter {

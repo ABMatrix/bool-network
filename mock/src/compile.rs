@@ -3,14 +3,14 @@
 
 //! Support for compiling scripts and modules in tests.
 
-use compiler::{Compiler};
+use compiler::Compiler;
 use vm::{
-    types::{
-        AccountAddress,
-        transaction::{Program, TransactionArgument},
-    },
     bytecode_verifier::VerifiedModule,
     def::file_format::CompiledProgram,
+    types::{
+        transaction::{Program, TransactionArgument},
+        AccountAddress,
+    },
 };
 
 // pub fn compile_program(body: &ast::Program) -> Vec<u8> {
@@ -35,7 +35,6 @@ pub fn compile_script(code: &str) -> Vec<u8> {
     compiler.into_script_blob().unwrap()
 }
 
-
 /// Compile the provided Move code and arguments into a `Program`.
 ///
 /// This supports both scripts and modules defined in the same Move code. The code is compiled with
@@ -47,7 +46,6 @@ pub fn compile_program(code: &str, args: Vec<TransactionArgument>) -> Program {
     };
     compiler.into_program(args).unwrap()
 }
-
 
 /// Compile the provided Move code and arguments into a `Program` using `address` as the
 /// self address for any modules in `code`.
@@ -64,10 +62,7 @@ pub fn compile_program_with_address(
     compiler.into_program(args).unwrap()
 }
 
-pub fn compile_inner_program_with_address(
-    address: &AccountAddress,
-    code: &str,
-) -> CompiledProgram {
+pub fn compile_inner_program_with_address(address: &AccountAddress, code: &str) -> CompiledProgram {
     let compiler = Compiler {
         address: *address,
         code,
@@ -79,7 +74,7 @@ pub fn compile_inner_program_with_address(
 pub fn compile_inner_program_with_deps(
     address: &AccountAddress,
     code: &str,
-    extra_deps: Vec<VerifiedModule>
+    extra_deps: Vec<VerifiedModule>,
 ) -> CompiledProgram {
     let compiler = Compiler {
         address: *address,
@@ -97,7 +92,7 @@ pub fn compile_program_with_deps(
     address: &AccountAddress,
     code: &str,
     args: Vec<TransactionArgument>,
-    extra_deps: Vec<VerifiedModule>
+    extra_deps: Vec<VerifiedModule>,
 ) -> Program {
     let compiler = Compiler {
         address: *address,

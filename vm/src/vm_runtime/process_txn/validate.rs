@@ -1,30 +1,28 @@
-use crate::vm_runtime::{
-    code_cache::{
-        module_cache::{ModuleCache, TransactionModuleCache},
-        script_cache::ScriptCache,
-    },
-    data_cache::RemoteCache,
-    loaded_data::loaded_module::LoadedModule,
-    process_txn::{verify::VerifiedTransaction, ProcessTransaction},
-    txn_executor::TransactionExecutor,
-	config::VMPublishingOption,
-};
-use log::{warn, info, error, trace};
-use tiny_keccak::Keccak;
-use crate::types::{
-    transaction::{
-        SignatureCheckedTransaction, TransactionPayload, MAX_TRANSACTION_SIZE_IN_BYTES,
-    },
-	SCRIPT_HASH_LENGTH,
-    vm_error::{VMStatus, VMValidationStatus},
-};
 use crate::def::{
     errors::convert_prologue_runtime_error,
     gas_schedule::{self, AbstractMemorySize, GasAlgebra, GasCarrier},
     transaction_metadata::TransactionMetadata,
 };
-use vm_cache_map::Arena;
+use crate::types::{
+    transaction::{SignatureCheckedTransaction, TransactionPayload, MAX_TRANSACTION_SIZE_IN_BYTES},
+    vm_error::{VMStatus, VMValidationStatus},
+    SCRIPT_HASH_LENGTH,
+};
+use crate::vm_runtime::{
+    code_cache::{
+        module_cache::{ModuleCache, TransactionModuleCache},
+        script_cache::ScriptCache,
+    },
+    config::VMPublishingOption,
+    data_cache::RemoteCache,
+    loaded_data::loaded_module::LoadedModule,
+    process_txn::{verify::VerifiedTransaction, ProcessTransaction},
+    txn_executor::TransactionExecutor,
+};
+use log::{error, info, trace, warn};
 use std::marker::PhantomData;
+use tiny_keccak::Keccak;
+use vm_cache_map::Arena;
 
 pub fn is_allowed_script(publishing_option: &VMPublishingOption, program: &[u8]) -> bool {
     match publishing_option {

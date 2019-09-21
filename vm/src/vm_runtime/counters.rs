@@ -1,14 +1,14 @@
 // Copyright (c) The Libra Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 
-use lazy_static;
 use super::op_metrics::OpMetrics;
-use prometheus::{IntCounter, IntGauge};
-use std::convert::TryFrom;
 use crate::types::{
     transaction::TransactionStatus,
     vm_error::{VMStatus, VMValidationStatus},
 };
+use lazy_static;
+use prometheus::{IntCounter, IntGauge};
+use std::convert::TryFrom;
 
 // constants used to create counters
 const TXN_EXECUTION_KEEP: &str = "txn.execution.keep";

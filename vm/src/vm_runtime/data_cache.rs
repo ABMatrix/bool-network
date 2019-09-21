@@ -2,23 +2,22 @@
 // SPDX-License-Identifier: Apache-2.0
 //! Scratchpad for on chain values during the execution.
 
-use	log::{info, warn, debug, error};
-use crate::state_view::StateView;
-use std::{collections::btree_map::BTreeMap, mem::replace};
-use crate::types::{
-    AccessPath,
-    ModuleId,
-    write_set::{WriteOp, WriteSet, WriteSetMut},
-};
 use crate::def::{
     errors::*,
     gas_schedule::{AbstractMemorySize, GasAlgebra, GasCarrier},
 };
+use crate::state_view::StateView;
 use crate::try_runtime;
-use crate::vm_runtime::{
-	loaded_data::struct_def::StructDef,
-	vm_runtime_types::value::{GlobalRef, Local, MutVal, Reference, Value},
+use crate::types::{
+    write_set::{WriteOp, WriteSet, WriteSetMut},
+    AccessPath, ModuleId,
 };
+use crate::vm_runtime::{
+    loaded_data::struct_def::StructDef,
+    vm_runtime_types::value::{GlobalRef, Local, MutVal, Reference, Value},
+};
+use log::{debug, error, info, warn};
+use std::{collections::btree_map::BTreeMap, mem::replace};
 
 /// The wrapper around the StateVersionView for the block.
 /// It keeps track of the value that have been changed during execution of a block.

@@ -1,17 +1,17 @@
-use crate::vm_runtime::{
-    code_cache::module_cache::ModuleCache,
-    process_txn::verify::{VerifiedTransaction, VerifiedTransactionState},
+use crate::def::{
+    access::ModuleAccess,
+    errors::{Location, VMErrorKind, VMRuntimeError},
 };
-use log::{warn, info, error};
 use crate::types::{
     transaction::{TransactionOutput, TransactionPayload, TransactionStatus},
     vm_error::{ExecutionStatus, VMStatus},
     write_set::WriteSet,
 };
-use crate::def::{
-    access::ModuleAccess,
-    errors::{Location, VMErrorKind, VMRuntimeError},
+use crate::vm_runtime::{
+    code_cache::module_cache::ModuleCache,
+    process_txn::verify::{VerifiedTransaction, VerifiedTransactionState},
 };
+use log::{error, info, warn};
 
 /// Represents a transaction that has been executed.
 pub struct ExecutedTransaction {

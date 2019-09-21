@@ -34,11 +34,11 @@ use super::{
     IndexKind, SignatureTokenKind,
 };
 
+use crate::types::{AccountAddress, ByteArray, ModuleId};
 #[cfg(any(test, feature = "testing"))]
 use proptest::{collection::vec, prelude::*, strategy::BoxedStrategy};
 #[cfg(any(test, feature = "testing"))]
 use proptest_derive::Arbitrary;
-use crate::types::{AccountAddress, ByteArray, ModuleId};
 
 /// Generic index into one of the tables in the binary format.
 pub type TableIndex = u16;

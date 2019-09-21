@@ -4,9 +4,8 @@
 #![allow(clippy::unit_arg)]
 
 use crate::types::{
-    AccountAddress,
-    Version,
     validator_verifier::{ValidatorVerifier, VerifyError},
+    AccountAddress, Version,
 };
 use canonical_serialization::{CanonicalSerialize, CanonicalSerializer, SimpleSerializer};
 use crypto::{

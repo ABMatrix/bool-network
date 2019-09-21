@@ -7,11 +7,7 @@ use std::{
     fmt,
     ops::Deref,
 };
-use vm::types::{
-	AccountAddress,
-	ByteArray,
-	ModuleId
-};
+use vm::types::{AccountAddress, ByteArray, ModuleId};
 
 /// Generic wrapper that keeps file locations for any ast-node
 #[derive(Debug, Copy, Clone, Eq, PartialEq, Default)]

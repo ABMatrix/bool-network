@@ -7,9 +7,6 @@ use super::{
     resources::ResourceTransitiveChecker, signature::SignatureChecker,
     struct_defs::RecursiveStructDefChecker,
 };
-use failure::Error;
-use std::{collections::BTreeMap, fmt};
-use crate::types::ModuleId;
 use crate::def::{
     access::{ModuleAccess, ScriptAccess},
     errors::{VMStaticViolation, VerificationError, VerificationStatus},
@@ -18,6 +15,9 @@ use crate::def::{
     views::{ModuleView, ViewInternals},
     IndexKind,
 };
+use crate::types::ModuleId;
+use failure::Error;
+use std::{collections::BTreeMap, fmt};
 
 /// A program that has been verified for internal consistency.
 ///

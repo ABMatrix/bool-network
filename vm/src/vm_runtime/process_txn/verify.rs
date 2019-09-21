@@ -1,3 +1,15 @@
+use crate::bytecode_verifier::{VerifiedModule, VerifiedScript};
+use crate::def::{
+    access::ModuleAccess,
+    errors::{VMStaticViolation, VerificationError, VerificationStatus},
+    file_format::{CompiledModule, CompiledScript, FunctionSignature, SignatureToken},
+    IndexKind,
+};
+use crate::types::{
+    transaction::{Program, SignatureCheckedTransaction, TransactionArgument, TransactionPayload},
+    vm_error::{VMStatus, VMVerificationError, VMVerificationStatus},
+    AccountAddress,
+};
 use crate::vm_runtime::{
     code_cache::{
         module_cache::{ModuleCache, TransactionModuleCache},
@@ -7,19 +19,7 @@ use crate::vm_runtime::{
     process_txn::{execute::ExecutedTransaction, validate::ValidatedTransaction},
     txn_executor::TransactionExecutor,
 };
-use crate::bytecode_verifier::{VerifiedModule, VerifiedScript};
-use log::{warn};
-use crate::types::{
-    AccountAddress,
-    transaction::{Program, SignatureCheckedTransaction, TransactionArgument, TransactionPayload},
-    vm_error::{VMStatus, VMVerificationError, VMVerificationStatus},
-};
-use crate::def::{
-    access::ModuleAccess,
-    errors::{VMStaticViolation, VerificationError, VerificationStatus},
-    file_format::{CompiledModule, CompiledScript, FunctionSignature, SignatureToken},
-    IndexKind,
-};
+use log::warn;
 
 /// Represents a transaction which has been validated and for which the program has been run
 /// through the bytecode verifier.

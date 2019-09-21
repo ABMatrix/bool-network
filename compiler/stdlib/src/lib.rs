@@ -7,8 +7,8 @@ pub mod transaction_scripts;
 use ir_to_bytecode::compiler::compile_module;
 use lazy_static::lazy_static;
 use vm::{
-	types::{AccountAddress, account_config},
-	bytecode_verifier::{verify_module_dependencies, VerifiedModule},
+    bytecode_verifier::{verify_module_dependencies, VerifiedModule},
+    types::{account_config, AccountAddress},
 };
 
 lazy_static! {

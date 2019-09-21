@@ -2,15 +2,14 @@
 // SPDX-License-Identifier: Apache-2.0
 
 use super::{file_format::SignatureToken, IndexKind, SignatureTokenKind};
+use crate::types::vm_error::{
+    ArithmeticErrorType, BinaryError as VMBinaryError, DynamicReferenceErrorType, ExecutionStatus,
+    VMInvariantViolationError, VMStatus, VMValidationStatus, VMVerificationError,
+    VMVerificationStatus,
+};
+use crate::types::{AccountAddress, ModuleId, TransactionStatus};
 use failure::Fail;
 use std::{fmt, iter::FromIterator};
-use crate::types::{
-    AccountAddress,
-    ModuleId,
-    TransactionStatus,
-};
-use crate::types::vm_error::{VMStatus, ExecutionStatus, VMValidationStatus, VMVerificationError, VMVerificationStatus,
-	ArithmeticErrorType, DynamicReferenceErrorType, BinaryError as VMBinaryError, VMInvariantViolationError};
 
 // We may want to eventually move this into the VM runtime since it is a semantic decision that
 // need to be made by the VM. But for now, this will reside here.

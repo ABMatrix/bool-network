@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 use super::dispatch::NativeReturnStatus;
+use crate::types::ByteArray;
 use crate::vm_runtime::vm_runtime_types::value::Local;
 use bit_vec::BitVec;
 use nextgen_crypto::{
@@ -10,7 +11,6 @@ use nextgen_crypto::{
     HashValue,
 };
 use std::{collections::VecDeque, convert::TryFrom};
-use crate::types::ByteArray;
 
 // TODO: Talk to Crypto to determine these costs
 const ED25519_COST: u64 = 35;

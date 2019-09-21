@@ -7,15 +7,14 @@ use crate::account::{AccountData, GENESIS_KEYPAIR};
 use crate::genesis::create_genesis_write_set;
 use failure::prelude::*;
 use lazy_static::lazy_static;
-use vm::state_view::StateView;
 use std::{collections::HashMap, fs::File, io::prelude::*, path::PathBuf};
+use vm::def::{errors::*, file_format::CompiledModule};
+use vm::state_view::StateView;
 use vm::types::{
-    AccessPath,
-    ModuleId,
     transaction::{SignedTransaction, TransactionPayload},
     write_set::{WriteOp, WriteSet},
+    AccessPath, ModuleId,
 };
-use vm::def::{errors::*, file_format::CompiledModule};
 use vm::vm_runtime::data_cache::RemoteCache;
 
 lazy_static! {

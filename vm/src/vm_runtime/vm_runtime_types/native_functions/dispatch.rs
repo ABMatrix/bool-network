@@ -1,11 +1,11 @@
 // Copyright (c) The Libra Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 
-use lazy_static::lazy_static;
 use super::{hash, primitive_helpers, signature, vector};
-use crate::vm_runtime::vm_runtime_types::value::Local;
-use std::collections::{HashMap, VecDeque};
 use crate::def::file_format::{FunctionSignature, SignatureToken, StructHandleIndex};
+use crate::vm_runtime::vm_runtime_types::value::Local;
+use lazy_static::lazy_static;
+use std::collections::{HashMap, VecDeque};
 
 /// Enum representing the result of running a native function
 pub enum NativeReturnStatus {

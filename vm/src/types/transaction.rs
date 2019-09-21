@@ -2,7 +2,6 @@
 // SPDX-License-Identifier: Apache-2.0
 
 use super::{
-    AccountAddress,
     account_state_blob::AccountStateBlob,
     contract_event::ContractEvent,
     ledger_info::LedgerInfo,
@@ -12,8 +11,12 @@ use super::{
     },
     vm_error::VMStatus,
     write_set::WriteSet,
-	Version,
-	ByteArray,
+    AccountAddress, ByteArray, Version,
+};
+use byteorder::{LittleEndian, WriteBytesExt};
+use canonical_serialization::{
+    CanonicalDeserialize, CanonicalDeserializer, CanonicalSerialize, CanonicalSerializer,
+    SimpleSerializer,
 };
 use crypto::{
     hash::{
@@ -22,15 +25,10 @@ use crypto::{
     },
     signing, HashValue, PrivateKey, PublicKey, Signature,
 };
-use canonical_serialization::{
-    CanonicalDeserialize, CanonicalDeserializer, CanonicalSerialize, CanonicalSerializer,
-    SimpleSerializer,
-};
-use byteorder::{LittleEndian, WriteBytesExt};
 use failure::prelude::*;
 use serde::{Deserialize, Serialize};
-use std::{convert::TryFrom, fmt, time::Duration, collections::HashMap};
 use std::ops::Deref;
+use std::{collections::HashMap, convert::TryFrom, fmt, time::Duration};
 
 #[derive(Clone, Hash, Eq, PartialEq, Serialize, Deserialize)]
 pub struct Program {
@@ -75,7 +73,6 @@ impl fmt::Debug for Program {
             .finish()
     }
 }
-
 
 #[derive(Clone, Hash, Eq, PartialEq, Serialize, Deserialize)]
 pub enum TransactionArgument {
@@ -395,9 +392,9 @@ impl SignedTransaction {
         )
     }
 
-	pub fn into_bytes(&self) -> Result<Vec<u8>> {
-		return Ok(vec![1, 2])
-	}
+    pub fn into_bytes(&self) -> Result<Vec<u8>> {
+        return Ok(vec![1, 2]);
+    }
 }
 
 impl CryptoHash for SignedTransaction {
@@ -485,7 +482,7 @@ impl CanonicalDeserialize for SignedTransaction {
         let raw_txn_bytes = deserializer.decode_variable_length_bytes()?;
         let public_key_bytes = deserializer.decode_variable_length_bytes()?;
         let signature_bytes = deserializer.decode_variable_length_bytes()?;
-		let raw_txn: RawTransaction = bincode::deserialize(&raw_txn_bytes[..])?;
+        let raw_txn: RawTransaction = bincode::deserialize(&raw_txn_bytes[..])?;
         Ok(SignedTransaction {
             raw_txn: raw_txn,
             public_key: PublicKey::from_slice(&public_key_bytes)?,
@@ -707,7 +704,6 @@ impl TransactionToCommit {
     }
 }
 
-
 /// The list may have three states:
 /// 1. The list is empty. Both proofs must be `None`.
 /// 2. The list has only 1 transaction/transaction_info. Then `proof_of_first_transaction`
@@ -774,4 +770,3 @@ impl TransactionListWithProof {
         }
     }
 }
-

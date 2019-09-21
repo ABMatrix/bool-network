@@ -1,39 +1,39 @@
-use hex;
-use vm_error::{VMStatus};
-use failure::prelude::*;
-use std::{
-	convert::TryFrom,
-	fmt::{self, Formatter},
-	slice::Iter,
-	str::{self, FromStr},
-};
-use rand::{rngs::OsRng, Rng};
-use serde::{Deserialize, Serialize};
-use crypto::{
-	hash::{AccessPathHasher, AccountAddressHasher,  CryptoHash, CryptoHasher, HashValue},
-	PublicKey as LegacyPublicKey,
-};
+use crate::types::transaction::TransactionArgument;
 use canonical_serialization::{
     CanonicalDeserialize, CanonicalDeserializer, CanonicalSerialize, CanonicalSerializer,
     SimpleSerializer,
 };
-use crate::types::transaction::TransactionArgument;
-use tiny_keccak::Keccak;
+use crypto::{
+    hash::{AccessPathHasher, AccountAddressHasher, CryptoHash, CryptoHasher, HashValue},
+    PublicKey as LegacyPublicKey,
+};
+use failure::prelude::*;
+use hex;
 use nextgen_crypto::{ed25519::*, VerifyingKey};
+use rand::{rngs::OsRng, Rng};
+use serde::{Deserialize, Serialize};
 use std::path::Display;
+use std::{
+    convert::TryFrom,
+    fmt::{self, Formatter},
+    slice::Iter,
+    str::{self, FromStr},
+};
+use tiny_keccak::Keccak;
+use vm_error::VMStatus;
 
-pub mod write_set;
-pub mod vm_error;	//-
-pub mod validator_verifier;	//-
-pub mod account_config;	//-
-pub mod proof;	//--
-pub mod account_state_blob;	//--
-pub mod contract_event;	//--
-pub mod ledger_info;	//--
-pub mod transaction;	//--
+pub mod account_config; //-
+pub mod account_state_blob; //--
+pub mod contract_event; //--
+pub mod ledger_info; //--
+pub mod proof; //--
+pub mod transaction;
+pub mod validator_verifier; //-
+pub mod vm_error; //-
+pub mod write_set; //--
 
-// 
-// 
+//
+//
 
 pub type Version = u64; // Height - also used for MVCC in StateDB
 pub const MAX_TRANSACTION_SIZE_IN_BYTES: usize = 4096;
@@ -78,23 +78,23 @@ impl AccountAddress {
 }
 
 impl fmt::Display for AccountAddress {
-	fn fmt(&self, f: &mut fmt::Formatter) -> std::fmt::Result {
-		// Forward to the LowerHex impl with a "0x" prepended (the # flag).
-		write!(f, "{:#x}", self)
-	}
+    fn fmt(&self, f: &mut fmt::Formatter) -> std::fmt::Result {
+        // Forward to the LowerHex impl with a "0x" prepended (the # flag).
+        write!(f, "{:#x}", self)
+    }
 }
 
 impl fmt::Debug for AccountAddress {
-	fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-		// Forward to the LowerHex impl with a "0x" prepended (the # flag).
-		write!(f, "{:#x}", self)
-	}
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        // Forward to the LowerHex impl with a "0x" prepended (the # flag).
+        write!(f, "{:#x}", self)
+    }
 }
 
 impl fmt::LowerHex for AccountAddress {
-	fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-		write!(f, "{}", hex::encode(&self.0))
-	}
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "{}", hex::encode(&self.0))
+    }
 }
 
 impl AsRef<[u8]> for AccountAddress {
@@ -114,8 +114,8 @@ impl TryFrom<String> for AccountAddress {
 }
 
 impl TryFrom<&[u8]> for AccountAddress {
-	type Error = failure::Error;
-	/// Tries to convert the provided byte array into Address.
+    type Error = failure::Error;
+    /// Tries to convert the provided byte array into Address.
     fn try_from(bytes: &[u8]) -> Result<AccountAddress> {
         ensure!(
             bytes.len() == ADDRESS_LENGTH,
@@ -125,7 +125,7 @@ impl TryFrom<&[u8]> for AccountAddress {
         let mut addr = [0u8; ADDRESS_LENGTH];
         addr.copy_from_slice(bytes);
         Ok(AccountAddress(addr))
-    } 
+    }
 }
 
 impl TryFrom<Vec<u8>> for AccountAddress {
@@ -182,8 +182,8 @@ impl CanonicalDeserialize for AccountAddress {
 
 #[derive(Debug, PartialEq, Hash, Eq, Clone, PartialOrd, Ord, Deserialize, Serialize)]
 pub struct ModuleId {
-	address: AccountAddress,
-	name: String,
+    address: AccountAddress,
+    name: String,
 }
 
 impl<'a> From<&'a ModuleId> for AccessPath {
@@ -193,17 +193,17 @@ impl<'a> From<&'a ModuleId> for AccessPath {
 }
 
 impl ModuleId {
-	pub fn new(address: AccountAddress, name: String) -> Self {
-		ModuleId { address, name }
-	}
+    pub fn new(address: AccountAddress, name: String) -> Self {
+        ModuleId { address, name }
+    }
 
-	pub fn name(&self) -> &String {
-		&self.name
-	}
+    pub fn name(&self) -> &String {
+        &self.name
+    }
 
-	pub fn address(&self) -> &AccountAddress {
-		&self.address
-	}
+    pub fn address(&self) -> &AccountAddress {
+        &self.address
+    }
 }
 
 impl fmt::Display for ModuleId {
@@ -241,75 +241,74 @@ impl CryptoHash for ModuleId {
 }
 
 pub enum TransactionStatus {
-	/// Discard the transaction output
-	Discard(VMStatus),
+    /// Discard the transaction output
+    Discard(VMStatus),
 
-	/// Keep the transaction output
-	Keep(VMStatus),
+    /// Keep the transaction output
+    Keep(VMStatus),
 }
 
 impl From<VMStatus> for TransactionStatus {
-	fn from(vm_status: VMStatus) -> Self {
-		let should_discard = match vm_status {
-			// Any error that is a validation status (i.e. an error arising from the prologue)
-			// causes the transaction to not be included.
-			VMStatus::Validation(_) => true,
-			// If the VM encountered an invalid internal state, we should discard the transaction.
-			VMStatus::InvariantViolation(_) => true,
-			// A transaction that publishes code that cannot be verified is currently not charged.
-			// Therefore the transaction can be excluded.
-			//
-			// The original plan was to charge for verification, but the code didn't implement it
-			// properly. The decision of whether to charge or not will be made based on data (if
-			// verification checks are too expensive then yes, otherwise no).
-			VMStatus::Verification(_) => true,
-			// Even if we are unable to decode the transaction, there should be a charge made to
-			// that user's account for the gas fees related to decoding, running the prologue etc.
-			VMStatus::Deserialization(_) => false,
-			// Any error encountered during the execution of the transaction will charge gas.
-			VMStatus::Execution(_) => false,
-		};
+    fn from(vm_status: VMStatus) -> Self {
+        let should_discard = match vm_status {
+            // Any error that is a validation status (i.e. an error arising from the prologue)
+            // causes the transaction to not be included.
+            VMStatus::Validation(_) => true,
+            // If the VM encountered an invalid internal state, we should discard the transaction.
+            VMStatus::InvariantViolation(_) => true,
+            // A transaction that publishes code that cannot be verified is currently not charged.
+            // Therefore the transaction can be excluded.
+            //
+            // The original plan was to charge for verification, but the code didn't implement it
+            // properly. The decision of whether to charge or not will be made based on data (if
+            // verification checks are too expensive then yes, otherwise no).
+            VMStatus::Verification(_) => true,
+            // Even if we are unable to decode the transaction, there should be a charge made to
+            // that user's account for the gas fees related to decoding, running the prologue etc.
+            VMStatus::Deserialization(_) => false,
+            // Any error encountered during the execution of the transaction will charge gas.
+            VMStatus::Execution(_) => false,
+        };
 
-		if should_discard {
-			TransactionStatus::Discard(vm_status)
-		} else {
-			TransactionStatus::Keep(vm_status)
-		}
-	}
+        if should_discard {
+            TransactionStatus::Discard(vm_status)
+        } else {
+            TransactionStatus::Keep(vm_status)
+        }
+    }
 }
-
 
 #[derive(Ord, PartialOrd, Eq, PartialEq, Hash, Default, Clone, Deserialize, Serialize)]
 pub struct ByteArray(Vec<u8>);
 
 impl ByteArray {
-	pub fn as_bytes(&self) -> &[u8] {
-		&self.0
-	}
+    pub fn as_bytes(&self) -> &[u8] {
+        &self.0
+    }
 
-	pub fn new(buf: Vec<u8>) -> Self {
-		ByteArray(buf)
-	}
+    pub fn new(buf: Vec<u8>) -> Self {
+        ByteArray(buf)
+    }
 
-	pub fn len(&self) -> usize {
-		self.0.len()
-	}
+    pub fn len(&self) -> usize {
+        self.0.len()
+    }
 
-	pub fn is_empty(&self) -> bool {
-		self.len() == 0
-	}
+    pub fn is_empty(&self) -> bool {
+        self.len() == 0
+    }
 }
 
 impl fmt::Debug for ByteArray {
-	fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
-		write!(f, "0x{}", hex::encode(&self.0))
-	}
+    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+        write!(f, "0x{}", hex::encode(&self.0))
+    }
 }
 
 impl fmt::Display for ByteArray {
-	fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
-		write!(f, "b\"{}\"", hex::encode(&self.0))
-	}
+    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+        write!(f, "b\"{}\"", hex::encode(&self.0))
+    }
 }
 
 impl CanonicalSerialize for ByteArray {
@@ -326,17 +325,7 @@ impl CanonicalDeserialize for ByteArray {
     }
 }
 
-#[derive(
-    Clone,
-    Eq,
-    PartialEq,
-    Default,
-    Hash,
-    Serialize,
-    Deserialize,
-    Ord,
-    PartialOrd,
-)]
+#[derive(Clone, Eq, PartialEq, Default, Hash, Serialize, Deserialize, Ord, PartialOrd)]
 pub struct AccessPath {
     pub address: AccountAddress,
     pub path: Vec<u8>,
@@ -423,7 +412,7 @@ impl AccessPath {
     }
 
     pub fn is_resource_path(&self) -> bool {
-        return Self::new_for_account(self.address) == *self
+        return Self::new_for_account(self.address) == *self;
     }
 }
 
@@ -480,7 +469,6 @@ impl CanonicalDeserialize for AccessPath {
         Ok(Self { address, path })
     }
 }
-
 
 #[derive(Default, Debug, PartialEq, Hash, Eq, Clone, Ord, PartialOrd)]
 pub struct Field(String);
@@ -651,7 +639,6 @@ pub struct StructTag {
     pub type_params: Vec<StructTag>,
 }
 
-
 impl CanonicalSerialize for StructTag {
     fn serialize(&self, serializer: &mut impl CanonicalSerializer) -> Result<()> {
         serializer
@@ -709,7 +696,6 @@ impl ResourceKey {
         ResourceKey { address, type_ }
     }
 }
-
 
 // LibraCoin
 pub const COIN_MODULE_NAME: &str = "LibraCoin";

@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 use super::{errors::*, file_format::*, file_format_common::*};
+use crate::types::{ByteArray, ADDRESS_LENGTH};
 use byteorder::{LittleEndian, ReadBytesExt};
 use std::{
     collections::HashSet,
@@ -9,7 +10,6 @@ use std::{
     io::{Cursor, Read},
     str::from_utf8,
 };
-use crate::types::{ADDRESS_LENGTH, ByteArray};
 
 impl CompiledScript {
     /// Deserializes a &[u8] slice into a `CompiledScript` instance.

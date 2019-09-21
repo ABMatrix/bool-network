@@ -1,19 +1,14 @@
 // Copyright (c) The Libra Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 
-use super::{
-	loaded_data::loaded_module::LoadedModule, 
-	runtime::VMRuntime, 
-	VMExecutor, 
-	VMVerifier
-};
-use crate::vm_runtime::config::VMConfig;
+use super::{loaded_data::loaded_module::LoadedModule, runtime::VMRuntime, VMExecutor, VMVerifier};
 use crate::state_view::StateView;
-use std::sync::Arc;
 use crate::types::{
     transaction::{SignedTransaction, TransactionOutput},
     vm_error::VMStatus,
 };
+use crate::vm_runtime::config::VMConfig;
+use std::sync::Arc;
 use vm_cache_map::Arena;
 
 rental! {

@@ -1,19 +1,15 @@
-use crypto::{signing, PrivateKey, PublicKey, signing::KeyPair};
+use crypto::{signing, signing::KeyPair, PrivateKey, PublicKey};
 use lazy_static::lazy_static;
-use std::{convert::TryInto, time::Duration, fmt};
-use vm::types::{
-    AccessPath,
-    AccountAddress,
-    account_config,
-	ByteArray,
-    transaction::{Program, RawTransaction, SignedTransaction, TransactionArgument},
-};
 use rand::{rngs::StdRng, SeedableRng};
-use vm::vm_runtime::identifier::create_access_path;
-use vm::vm_runtime::vm_runtime_types::{
-    value::{MutVal, Value},
+use std::{convert::TryInto, fmt, time::Duration};
+use vm::types::{
+    account_config,
+    transaction::{Program, RawTransaction, SignedTransaction, TransactionArgument},
+    AccessPath, AccountAddress, ByteArray,
 };
+use vm::vm_runtime::identifier::create_access_path;
 use vm::vm_runtime::loaded_data::struct_def::StructDef;
+use vm::vm_runtime::vm_runtime_types::value::{MutVal, Value};
 
 // The seed is arbitrarily picked to produce a consistent key. XXX make this more formal?
 const GENESIS_SEED: [u8; 32] = [42; 32];
@@ -25,12 +21,10 @@ lazy_static! {
         let mut rng: StdRng = SeedableRng::from_seed(GENESIS_SEED);
         signing::generate_keypair_for_testing(&mut rng)
     };
-
     pub static ref ALICE: (PrivateKey, PublicKey) = {
         let mut rng: StdRng = SeedableRng::from_seed(ALICE_SEED);
         signing::generate_keypair_for_testing(&mut rng)
     };
-
     pub static ref BOB: (PrivateKey, PublicKey) = {
         let mut rng: StdRng = SeedableRng::from_seed(BOB_SEED);
         signing::generate_keypair_for_testing(&mut rng)

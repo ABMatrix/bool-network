@@ -1,17 +1,17 @@
 // Copyright (c) The Libra Core Contributors
 // SPDX-License-Identifier: Apache-2.0
 
+use super::vm_runtime_types::value::Local;
 use super::{
     bounded_fetch,
     loaded_data::{function::FunctionReference, loaded_module::LoadedModule},
 };
-use std::{fmt, marker::PhantomData, mem::replace};
 use crate::def::{
     errors::{Location, VMInvariantViolation, VMResult},
     file_format::{Bytecode, CodeOffset, LocalIndex},
     IndexKind,
 };
-use super::vm_runtime_types::value::Local;
+use std::{fmt, marker::PhantomData, mem::replace};
 
 pub struct Frame<'txn, F: 'txn> {
     pc: u16,

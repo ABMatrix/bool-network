@@ -3,7 +3,7 @@
 
 use super::AccountAddress;
 use failure::prelude::*;
-use log::{warn};
+use log::warn;
 use nextgen_crypto::*;
 use std::collections::HashMap;
 

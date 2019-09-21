@@ -4,11 +4,8 @@
 use ir_to_bytecode::{compiler::compile_module, parser::parse_module};
 use std::{fs, path::Path};
 use vm::{
-	types::AccountAddress,
-	def::{
-		access::ModuleAccess,
-		file_format::CompiledModule,
-	},
+    def::{access::ModuleAccess, file_format::CompiledModule},
+    types::AccountAddress,
 };
 
 pub fn do_compile_module<T: ModuleAccess>(

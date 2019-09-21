@@ -3,8 +3,8 @@
 //! Loaded representation for Move modules.
 
 use super::function::FunctionDef;
+use super::struct_def::StructDef;
 use crate::bytecode_verifier::VerifiedModule;
-use std::{collections::HashMap, sync::RwLock};
 use crate::def::{
     access::ModuleAccess,
     errors::VMInvariantViolation,
@@ -14,7 +14,7 @@ use crate::def::{
     },
     internals::ModuleIndex,
 };
-use super::struct_def::StructDef;
+use std::{collections::HashMap, sync::RwLock};
 
 /// Defines a loaded module in the memory. Currently we just store module itself with a bunch of
 /// reverse mapping that allows querying definition of struct/function by name.

@@ -4,11 +4,7 @@
 #![allow(clippy::unit_arg)]
 
 use crate::types::{
-   	AccessPath,
-	Accesses,
-    AccountAddress,
-    account_state_blob::AccountStateBlob,
-    ByteArray,
+    account_state_blob::AccountStateBlob, AccessPath, Accesses, AccountAddress, ByteArray,
     StructTag,
 };
 use canonical_serialization::{

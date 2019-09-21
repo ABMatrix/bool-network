@@ -8,21 +8,21 @@ use crate::{
     data_store::{FakeDataStore, GENESIS_WRITE_SET},
 };
 use vm::{
-	vm_runtime::{
-		config::{VMConfig, VMPublishingOption},
-		move_vm::MoveVM, VMExecutor, VMVerifier,
-		loaded_data::{struct_def::StructDef, types::Type},
-		vm_runtime_types::{value::Value}
-	},
-	state_view::StateView,
-	types::{
-    AccessPath,
-    ModuleId,
-    transaction::{SignedTransaction, TransactionOutput},
-    vm_error::VMStatus,
-    write_set::WriteSet
-	},
-	def::file_format::CompiledModule,
+    def::file_format::CompiledModule,
+    state_view::StateView,
+    types::{
+        transaction::{SignedTransaction, TransactionOutput},
+        vm_error::VMStatus,
+        write_set::WriteSet,
+        AccessPath, ModuleId,
+    },
+    vm_runtime::{
+        config::{VMConfig, VMPublishingOption},
+        loaded_data::{struct_def::StructDef, types::Type},
+        move_vm::MoveVM,
+        vm_runtime_types::value::Value,
+        VMExecutor, VMVerifier,
+    },
 };
 
 /// Provides an environment to run a VM instance.

@@ -2,7 +2,27 @@
 // SPDX-License-Identifier: Apache-2.0
 //! Processor for a single transaction.
 
-use lazy_static::lazy_static;
+use crate::bytecode_verifier::{VerifiedModule, VerifiedScript};
+use crate::def::{
+    access::ModuleAccess,
+    errors::*,
+    file_format::{Bytecode, CodeOffset, CompiledScript, StructDefinitionIndex},
+    gas_schedule::{AbstractMemorySize, GasAlgebra, GasUnits},
+    transaction_metadata::TransactionMetadata,
+};
+use crate::try_runtime;
+use crate::types::{
+    account_config,
+    contract_event::ContractEvent,
+    transaction::{TransactionArgument, TransactionOutput, TransactionStatus},
+    vm_error::{ExecutionStatus, VMStatus},
+    write_set::WriteSet,
+    AccessPath, AccountAddress, ByteArray, ModuleId,
+};
+use crate::vm_runtime::vm_runtime_types::{
+    native_functions::dispatch::{dispatch_native_function, NativeReturnStatus},
+    value::{Local, MutVal, Reference, Value},
+};
 use crate::vm_runtime::{
     code_cache::module_cache::{ModuleCache, VMModuleCache},
     data_cache::{RemoteCache, TransactionDataCache},
@@ -14,32 +34,9 @@ use crate::vm_runtime::{
         loaded_module::LoadedModule,
     },
 };
-use crate::bytecode_verifier::{VerifiedModule, VerifiedScript};
+use lazy_static::lazy_static;
 use std::collections::VecDeque;
-use crate::types::{
-    AccessPath,
-    AccountAddress,
-    account_config,
-    ByteArray,
-    contract_event::ContractEvent,
-    ModuleId,
-    transaction::{TransactionArgument, TransactionOutput, TransactionStatus},
-    vm_error::{ExecutionStatus, VMStatus},
-    write_set::WriteSet,
-};
-use crate::try_runtime;
-use crate::def::{
-    access::ModuleAccess,
-    errors::*,
-    file_format::{Bytecode, CodeOffset, CompiledScript, StructDefinitionIndex},
-    gas_schedule::{AbstractMemorySize, GasAlgebra, GasUnits},
-    transaction_metadata::TransactionMetadata,
-};
 use vm_cache_map::Arena;
-use crate::vm_runtime::vm_runtime_types::{
-    native_functions::dispatch::{dispatch_native_function, NativeReturnStatus},
-    value::{Local, MutVal, Reference, Value},
-};
 
 // #[cfg(test)]
 // #[path = "unit_tests/runtime_tests.rs"]

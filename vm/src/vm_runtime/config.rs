@@ -1,6 +1,4 @@
-use std::{
-    collections::HashSet,
-};
+use std::collections::HashSet;
 
 pub const SCRIPT_HASH_LENGTH: usize = 32;
 

@@ -7,14 +7,12 @@ use crate::vm_runtime::{
         module_cache::{BlockModuleCache, ModuleCache, VMModuleCache},
         script_cache::ScriptCache,
     },
+    config::VMPublishingOption,
     counters::{report_block_count, report_execution_status},
     data_cache::BlockDataCache,
     process_txn::{execute::ExecutedTransaction, validate::ValidationMode, ProcessTransaction},
-	config::VMPublishingOption,
 };
 
-use log::{info, warn, error, trace};
-use rayon::prelude::*;
 use crate::state_view::StateView;
 use crate::types::{
     transaction::{
@@ -23,6 +21,8 @@ use crate::types::{
     vm_error::{ExecutionStatus, VMStatus, VMValidationStatus},
     write_set::WriteSet,
 };
+use log::{error, info, trace, warn};
+use rayon::prelude::*;
 use vm_cache_map::Arena;
 
 pub fn execute_block<'alloc>(
