@@ -87,17 +87,17 @@ decl_module! {
             Ok(())
         }
 
-        pub fn create_account(origin, pubkey: Vec<u8>, value: u64) -> Result {
-            let sender = ensure_signed(origin)?;
-            let mut executor = Self::get_executor();
-
-            // TODO: check pubkey and sender.
-            let expected_index = <system::Module<T>>::account_nonce(sender);
-//			let account = AccountData::new_with_account(Account::mock(&pubkey), value, As::<u64>::as_(expected_index));
-            let account = AccountData::new_with_account(Account::mock(&pubkey), value, 0);
-            executor.add_account_data(&account);
-            Ok(())
-        }
+//        pub fn create_account(origin, pubkey: Vec<u8>, value: u64) -> Result {
+//            let sender = ensure_signed(origin)?;
+//            let mut executor = Self::get_executor();
+//
+//            // TODO: check pubkey and sender.
+//            let expected_index = <system::Module<T>>::account_nonce(sender);
+////			let account = AccountData::new_with_account(Account::mock(&pubkey), value, As::<u64>::as_(expected_index));
+//            let account = AccountData::new_with_account(Account::mock(&pubkey), value, 0);
+//            executor.add_account_data(&account);
+//            Ok(())
+//        }
     }
 }
 
