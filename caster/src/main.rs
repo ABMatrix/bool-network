@@ -205,7 +205,7 @@ fn deal_command_make_tx(args: &ArgMatches) {
 
     let se_txn = SimpleSerializer::<Vec<u8>>::serialize(&signed_txn).unwrap();
     let hex = hex::encode(se_txn);
-    print!("0x{}", hex);
+    println!("0x{}", hex);
 }
 
 const APP_DIR: &str = "Caster";
