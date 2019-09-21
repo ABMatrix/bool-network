@@ -7,6 +7,7 @@ use crate::{account::Account, compile::compile_script, gas_costs};
 use lazy_static::lazy_static;
 use stdlib::transaction_scripts;
 use vm::types::{
+    account_config::association_address,
     transaction::{SignedTransaction, TransactionArgument},
     AccountAddress, ByteArray,
 };
@@ -96,7 +97,8 @@ pub fn mint_txn(
     args.push(TransactionArgument::U64(transfer_amount));
 
     // get a SignedTransaction
-    sender.create_signed_txn_with_args(
+    sender.create_signed_txn_with_args_and_sender(
+        association_address(),
         MINT.clone(),
         args,
         seq_num,

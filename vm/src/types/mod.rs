@@ -1,3 +1,4 @@
+use crate::types::account_config::core_code_address;
 use crate::types::transaction::TransactionArgument;
 use canonical_serialization::{
     CanonicalDeserialize, CanonicalDeserializer, CanonicalSerialize, CanonicalSerializer,
@@ -74,6 +75,26 @@ impl AccountAddress {
         keccak.update(&public_key.to_bytes());
         keccak.finalize(&mut hash);
         AccountAddress::new(hash)
+    }
+
+    pub fn from_hex_literal(literal: &str) -> Result<Self> {
+        let mut hex_string = String::from(&literal[2..]);
+        if hex_string.len() % 2 != 0 {
+            hex_string.insert(0, '0');
+        }
+
+        let mut result = hex::decode(hex_string.as_str())?;
+        let len = result.len();
+        if len < 32 {
+            result.reverse();
+            for _ in len..32 {
+                result.push(0);
+            }
+            result.reverse();
+        }
+
+        assert!(result.len() >= 32);
+        AccountAddress::try_from(result)
     }
 }
 
@@ -776,13 +797,13 @@ pub fn account_received_event_path() -> Vec<u8> {
     path
 }
 
-pub fn core_code_address() -> AccountAddress {
-    AccountAddress::default()
-}
+//pub fn core_code_address() -> AccountAddress {
+//    AccountAddress::default()
+//}
 
-pub fn association_address() -> AccountAddress {
-    AccountAddress::default()
-}
+//pub fn association_address() -> AccountAddress {
+//    AccountAddress::default()
+//}
 
 #[derive(Clone, Debug, Fail)]
 pub enum ErrorKind {
