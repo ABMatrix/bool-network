@@ -145,3 +145,15 @@ use [Substrate explorer](http://39.100.63.66:8096/#/extrinsics) to execute scrip
 
 At  [Chain State](http://39.100.63.66:8096/#/chainstate) page, you can see the new account balance.
 
+# Roadmap
+- In August 2019, the Substrate-based Ethereum Bridge and move smart contract design were completed. Completed BOOL NETWORK architecture design.
+
+- In September 2019, the Ethereum Bridge and Native Move Runtime were developed based on Substrate.
+
+- In October 2019, implement WASM Move Runtime.
+
+- In November 2019, implement a system like MakerDao based on the Move language.
+
+- In December 2019, design and implement a decentralized trading engine based on Substrate, BOOL MAIN NETWORK will be online.
+
+- In 2020, BOOL NETWORK main network continues to iterate.
