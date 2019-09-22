@@ -1,6 +1,6 @@
 # Move Node
 
-A new SRML-based substrate and libra move engine.
+A new RML-based substrate and libra move engine.
 
 # Building
 
